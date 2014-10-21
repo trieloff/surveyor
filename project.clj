@@ -1,0 +1,9 @@
+(defproject surveyor "0.1.0-SNAPSHOT"
+  :description "Create surveys from feature sets"
+  :url "https://github.com/trieloff/suveyor"
+  :license {:name "Apache License 2.0"
+            :url "http://www.apache.org/licenses/LICENSE-2.0.html"}
+  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :main ^:skip-aot surveyor.core
+  :target-path "target/%s"
+  :profiles {:uberjar {:aot :all}})
