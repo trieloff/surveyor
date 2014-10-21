@@ -6,7 +6,7 @@ FIXME: description
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Download from https://github.com/trieloff/suveyor.
 
 ## Usage
 
