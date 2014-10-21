@@ -3,7 +3,10 @@
   :url "https://github.com/trieloff/suveyor"
   :license {:name "Apache License 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :dependencies [[org.clojure/clojure "1.6.0"]
+                 [http-kit "2.1.16"]
+                 [clj-time "0.6.0"]
+                 [cheshire "5.3.1"]]
   :main ^:skip-aot surveyor.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
