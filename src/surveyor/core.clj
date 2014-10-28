@@ -7,6 +7,7 @@
   (:require [org.httpkit.client :as http]))
 
 (load "aha")
+(load "fluidsurveys")
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -16,3 +17,5 @@
 (def filtered (take 3 (filter #(has-outcome %) (get-features "BYP-R-1"))))
 
 (map extract-outcome filtered)
+
+(println (create-survey (map extract-outcome filtered)))
