@@ -15,13 +15,4 @@
 
 (def filtered (take 3 (filter #(has-outcome %) (get-features "BYP-R-1"))))
 
-(map (fn [feature] (hash-map
-                    "reference_num" (get feature "reference_num")
-                    "resource" (get feature "resource")
-                    "url" (get feature "url")
-                    "name" (get feature "name")
-                    "outcome" (get (first (filter
-                               #(= (get % "key") "outcome")
-                               (get feature "custom_fields"))) "value")
-                    )) filtered)
-
+(map extract-outcome filtered)

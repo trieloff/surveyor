@@ -18,6 +18,20 @@
                #(and (= (get % "key") "outcome") (not= (get % "value") ""))
                (get feature "custom_fields")))))
 
+(defn extract-outcome
+  "Extracts the outcome custom field from a feature"
+  [feature]
+  (hash-map
+   "reference_num" (get feature "reference_num")
+   "resource" (get feature "resource")
+   "url" (get feature "url")
+   "name" (get feature "name")
+   "outcome" (get (first (filter
+                          #(= (get % "key") "outcome")
+                          (get feature "custom_fields"))) "value")
+   ))
+
+
 (defn get-features
   "Retrieves a lazy seq of features for a given release, starting at the
   specified page. More features are retrieved until the end of the seq"
