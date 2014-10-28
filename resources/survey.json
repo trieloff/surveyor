@@ -1,0 +1,366 @@
+{
+    "languages": [
+        {
+            "code": "en",
+            "name": "English",
+            "isDefault": true
+        }
+    ],
+    "form": [
+        {
+            "type": "page",
+            "children": [
+                {
+                    "randomizeLimit": false,
+                    "alphabetize": false,
+                    "unique": false,
+                    "description": {
+                        "en": "Rate from 0 (not important) to 10 (most important)"
+                    },
+                    "uniqueError": "Responses must be unique",
+                    "title": {
+                        "en": "How important are the following outcomes for you?"
+                    },
+                    "type": "question",
+                    "showBorders": false,
+                    "idname": "single-choice-grid",
+                    "choices": [
+                        {
+                            "label": {
+                                "en": "0"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "1"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "2"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "3"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "4"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "5"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "6"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "7"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "8"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "9"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "10"
+                            }
+                        }
+                    ],
+                    "grouped": true,
+                    "staticcol": false,
+                    "id": "MXG7uITKA2",
+                    "alternateBackground": false,
+                    "questionSize": 30,
+                    "randomize": false,
+                    "children": [
+                        {
+                            "type": "single",
+                            "required": false,
+                            "static": false,
+                            "label": {
+                                "en": "My dog runs fast"
+                            }
+                        },
+                        {
+                            "type": "single",
+                            "required": false,
+                            "static": false,
+                            "label": {
+                                "en": "My dog barks loudly"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "randomizeLimit": false,
+                    "alphabetize": false,
+                    "unique": false,
+                    "description": {
+                        "en": "Rate from 0 (not at all satisfied) to 10 (fully satisfied)"
+                    },
+                    "uniqueError": "Responses must be unique",
+                    "title": {
+                        "en": "How satisfied are you with following outcomes"
+                    },
+                    "type": "question",
+                    "showBorders": false,
+                    "idname": "single-choice-grid",
+                    "choices": [
+                        {
+                            "label": {
+                                "en": "0"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "1"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "2"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "3"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "4"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "5"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "6"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "7"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "8"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "9"
+                            }
+                        },
+                        {
+                            "label": {
+                                "en": "10"
+                            }
+                        }
+                    ],
+                    "grouped": true,
+                    "staticcol": false,
+                    "id": "34Ucx2UbmL",
+                    "alternateBackground": false,
+                    "questionSize": 30,
+                    "randomize": false,
+                    "children": [
+                        {
+                            "type": "single",
+                            "required": false,
+                            "static": false,
+                            "label": {
+                                "en": "Maximize the speed of my dog"
+                            }
+                        },
+                        {
+                            "type": "single",
+                            "required": false,
+                            "static": false,
+                            "label": {
+                                "en": "Maximize the volume of my dog's barks"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "randomizeLimit": false,
+                    "alphabetize": false,
+                    "unique": false,
+                    "description": {
+                        "en": ""
+                    },
+                    "uniqueError": "Responses must be unique",
+                    "title": {
+                        "en": "How would you feel if following outcomes can be achieved."
+                    },
+                    "type": "question",
+                    "showBorders": false,
+                    "idname": "dropdown-grid",
+                    "choices": [
+                        {
+                            "code": "like",
+                            "score": "",
+                            "label": {
+                                "en": "I like it"
+                            }
+                        },
+                        {
+                            "code": "must",
+                            "label": {
+                                "en": "I expect it"
+                            }
+                        },
+                        {
+                            "code": "neutral",
+                            "label": {
+                                "en": "I don't care"
+                            }
+                        },
+                        {
+                            "code": "tolerate",
+                            "label": {
+                                "en": "I can tolerate it"
+                            }
+                        },
+                        {
+                            "code": "dislike",
+                            "label": {
+                                "en": "I dislike it"
+                            }
+                        }
+                    ],
+                    "grouped": true,
+                    "staticcol": false,
+                    "id": "T50nWmv9nd",
+                    "alternateBackground": false,
+                    "questionSize": 30,
+                    "randomize": false,
+                    "children": [
+                        {
+                            "randomizeLimit": "",
+                            "alphabetize": false,
+                            "type": "dropdown",
+                            "required": false,
+                            "label": {
+                                "en": "My dog runs fast"
+                            },
+                            "static": false,
+                            "randomize": false
+                        },
+                        {
+                            "randomizeLimit": "",
+                            "alphabetize": false,
+                            "type": "dropdown",
+                            "required": false,
+                            "label": {
+                                "en": "My dog barks loudly"
+                            },
+                            "static": false,
+                            "randomize": false
+                        }
+                    ]
+                },
+                {
+                    "randomizeLimit": false,
+                    "alphabetize": false,
+                    "unique": false,
+                    "description": {
+                        "en": ""
+                    },
+                    "uniqueError": "Responses must be unique",
+                    "title": {
+                        "en": "How would you feel if following outcomes are prevented, this means they cannot be achieved."
+                    },
+                    "type": "question",
+                    "showBorders": false,
+                    "idname": "dropdown-grid",
+                    "choices": [
+                        {
+                            "code": "like",
+                            "label": {
+                                "en": "I like it"
+                            }
+                        },
+                        {
+                            "code": "must",
+                            "label": {
+                                "en": "I expect it"
+                            }
+                        },
+                        {
+                            "code": "neutral",
+                            "label": {
+                                "en": "I don't care"
+                            }
+                        },
+                        {
+                            "code": "tolerate",
+                            "label": {
+                                "en": "I can tolerate it"
+                            }
+                        },
+                        {
+                            "code": "dislike",
+                            "label": {
+                                "en": "I dislike it"
+                            }
+                        }
+                    ],
+                    "grouped": true,
+                    "staticcol": false,
+                    "id": "eXlWMuDymb",
+                    "alternateBackground": false,
+                    "questionSize": 30,
+                    "randomize": false,
+                    "children": [
+                        {
+                            "randomizeLimit": "",
+                            "alphabetize": false,
+                            "type": "dropdown",
+                            "required": false,
+                            "label": {
+                                "en": "My dog runs fast"
+                            },
+                            "static": false,
+                            "randomize": false
+                        },
+                        {
+                            "randomizeLimit": "",
+                            "alphabetize": false,
+                            "type": "dropdown",
+                            "required": false,
+                            "label": {
+                                "en": "My dog barks loudly"
+                            },
+                            "static": false,
+                            "randomize": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "title": {
+        "en": "Test Survey"
+    }
+}
