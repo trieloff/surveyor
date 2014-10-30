@@ -122,7 +122,10 @@
                                                                                                       {"code" "tolerate", "label"
                                                                                                        {"en" "I can tolerate it"}}
                                                                                                       {"code" "dislike", "label"
-                                                                                                       {"en" "I dislike it"}}], "type" "question", "alternateBackground" false, "staticcol" false, "description"
+                                                                                                       {"en" "I dislike it"}}],
+                       "type" "question",
+                       "alternateBackground" false,
+                       "staticcol" false, "description"
                        {"en" ""}}
                       {"showBorders" false,
                        "unique" false,
