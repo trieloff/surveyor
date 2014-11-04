@@ -79,7 +79,7 @@
    "questionSize" 30,
    "uniqueError" "Responses must be unique",
    "title"
-   {"en" "How would you feel if following outcomes are prevented, this means they cannot be achieved."},
+   {"en" question},
    "choices" likert,
    "type" "question",
    "alternateBackground" false,
