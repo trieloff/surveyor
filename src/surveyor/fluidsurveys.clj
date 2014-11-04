@@ -38,9 +38,6 @@
    {"en" (str "Rate from " from " (" least ") to " to " (" most ")")}}
   )
 
-
-{"randomizeLimit" "", "alphabetize" false, "type" "dropdown", "required" false, "label" {"en" "My dog runs fast"}, "static" false, "randomize" false}
-
 (defn create-question-kano
   [id question outcomes]
   {"showBorders" false,
