@@ -19,3 +19,8 @@
 (map extract-outcome filtered)
 
 (println (create-survey (map extract-outcome filtered)))
+
+(defn post-survey
+  [json]
+  ;todo
+  )
