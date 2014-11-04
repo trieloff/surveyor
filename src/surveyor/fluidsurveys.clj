@@ -11,30 +11,6 @@
               {"code" "dislike", "label"
                {"en" "I dislike it"}}])
 
-
-{"languages"
- [
-  {"code" "en", "name" "English", "isDefault" true}],
- "form" [
-         {"type" "page",
-          "children" [
-                      (create-question-ulwick "ulwick-importance"
-                                              "How import are the following outcomes to you?"
-                                              "least impotant" "most important" 0 10
-                                              ["Fifi" "Fufu"])
-                      (create-question-ulwick "ulwick-satisfaction"
-                                              "How satisfied are you with the following outcomes?"
-                                              "not at all satisfied" "fully satisfied" 0 10
-                                              ["Fifi" "Fufu"])
-                      (create-question-kano "kano-posititive"
-                                            "How would you feel if following outcome would be achieved?"
-                                            ["Fifi" "Fufu"])
-                      (create-question-kano "kano-negative"
-                                            "How would you feel if following outcomes are prevented, this means they cannot be achieved?"
-                                            ["Fifi" "Fufu"])
-                      ]}],
- "title" {"en" "Test Survey"}}
-
 (defn create-labels
   "Generates a sequence of labels for range responses."
   [from to]
@@ -92,10 +68,29 @@
   "Creates a JSON body for new surveys based on a list of features and
   outcomes"
   [features]
-  (generate-string {"title" "My very fine survey"
-                    "form" [{"children" [{"title" "Is that a question?"
-                                          "idname" "text-response"
-                                          "children" [{"type" "string"}]
-                                          "id" "1"}]}]})
+  (let [outcomes (map #(get % "outcome") features)]
+  (generate-string
+   {"structure" {"languages"
+    [
+     {"code" "en", "name" "English", "isDefault" true}],
+    "form" [
+            {"type" "page",
+             "children" [
+                         (create-question-ulwick "ulwick-importance"
+                                                 "How import are the following outcomes to you?"
+                                                 "least impotant" "most important" 0 10
+                                                 outcomes)
+                         (create-question-ulwick "ulwick-satisfaction"
+                                                 "How satisfied are you with the following outcomes?"
+                                                 "not at all satisfied" "fully satisfied" 0 10
+                                                 outcomes)
+                         (create-question-kano "kano-posititive"
+                                               "How would you feel if following outcome would be achieved?"
+                                               outcomes)
+                         (create-question-kano "kano-negative"
+                                               "How would you feel if following outcomes are prevented, this means they cannot be achieved?"
+                                               outcomes)
+                         ]}],
+    "title" {"en" "Test Survey"}}}))
   ;)(generate-string features)
   )
