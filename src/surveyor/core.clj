@@ -19,3 +19,5 @@
 (map extract-outcome filtered)
 
 (-> (map extract-outcome filtered) create-survey post-survey)
+
+(count (get-results {"responses_uri" "https://fluidsurveys.com/api/v3/surveys/717704/responses/"}))

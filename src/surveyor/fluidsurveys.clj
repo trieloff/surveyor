@@ -108,3 +108,15 @@
       (let [{:keys [status headers body error] :as string}
             @(http/put (get survey "survey_structure_uri") (assoc fluidsurveys-options :body json))] survey)
       ))))
+
+(defn get-results
+  [survey]
+  (let [{:keys [status headers body error] :as string}
+    @(http/get (get survey "responses_uri") fluidsurveys-options)]
+    (let [response (parse-string body)
+          results (get response "results")]
+      (if-not (= nil (get response "next"))
+        (lazy-seq (into results (get-results {"responses_uri" (get response "next")})))
+        results)
+    )
+))
