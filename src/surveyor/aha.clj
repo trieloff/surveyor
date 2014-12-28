@@ -1,7 +1,8 @@
 (in-ns 'surveyor.core)
 
 (def aha-options {:timeout 2000             ; ms
-              :headers {"Authorization" "Bearer 4ae035c900cfc348ac8a1c7679c858928653995424b223db14c4328d621de354"}})
+
+              :headers {"Authorization" "Bearer 4ae035c900cfc348ac8a1c7679c858928653995424b223db14c4328d621de354" "Content-Type" "application/json"}})
 
 (defn feature-details
   "Retrieves the detailed feature description for a given feature from a
@@ -31,6 +32,14 @@
                           (get feature "custom_fields"))) "value")
    ))
 
+
+(defn update-survey-url
+  [feature survey index]
+ (let [{:keys [status headers body error] :as string}
+       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"custom_fields" {"survey" (str survey "#" index)}}})))]
+   body)
+
+)
 
 (defn get-features
   "Retrieves a lazy seq of features for a given release, starting at the
