@@ -23,3 +23,12 @@
 (update-survey-urls (map extract-custom filtered) "https://fluidsurveys.com/api/v3/surveys/717704/")
 
 (get-results {"responses_uri" "https://fluidsurveys.com/api/v3/surveys/717704/responses/"})
+
+; MAIN PROGRAM FLOW
+; #1 Select Release
+; #2 Create Survey
+; #3 Save Survey to Features
+; #4 Run Survey
+; #5 Retrieve Results
+; #6 Interpret Results
+; #7 Save Results as Scores
