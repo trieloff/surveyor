@@ -30,6 +30,9 @@
    "outcome" (get (first (filter
                           #(= (get % "key") "outcome")
                           (get feature "custom_fields"))) "value")
+   "survey" (get (first (filter
+                          #(= (get % "key") "survey")
+                          (get feature "custom_fields"))) "value")
    ))
 
 
