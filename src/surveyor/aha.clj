@@ -44,6 +44,11 @@
 
 )
 
+(defn update-survey-urls
+  [features survey]
+ (map-indexed (fn [index item] (update-survey-url (get item "reference_num") survey index)) features)
+)
+
 (defn get-features
   "Retrieves a lazy seq of features for a given release, starting at the
   specified page. More features are retrieved until the end of the seq"

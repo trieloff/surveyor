@@ -20,4 +20,6 @@
 
 ;(-> (map extract-custom filtered) create-survey post-survey)
 
-(count (get-results {"responses_uri" "https://fluidsurveys.com/api/v3/surveys/717704/responses/"}))
+(update-survey-urls (map extract-custom filtered) "https://fluidsurveys.com/api/v3/surveys/717704/")
+
+(get-results {"responses_uri" "https://fluidsurveys.com/api/v3/surveys/717704/responses/"})
