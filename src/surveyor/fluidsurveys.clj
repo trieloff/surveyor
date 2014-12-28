@@ -95,3 +95,15 @@
     "title" {"en" "Test Survey"}}}))
   ;)(generate-string features)
   )
+
+
+
+(defn post-survey
+  [json title]
+  (let [{:keys [status headers body error] :as string}
+         @(http/post "https://fluidsurveys.com/api/v3/surveys/" (assoc fluidsurveys-options :form-params {:name title}))]
+    (get (parse-string body) "survey_structure_uri")))
+
+
+
+(post-survey "" "hello")
