@@ -13,7 +13,7 @@
 
 ; bad, bad coder!
 (def fluidsurveys-options {:timeout 2000             ; ms
-              :headers {"Authorization" "Basic bGFyc0B0cmllbG9mZi5uZXQ6SDhwLVQ1Ui03YTYtellM"}})
+              :headers {"Authorization" "Basic bGFyc0B0cmllbG9mZi5uZXQ6SDhwLVQ1Ui03YTYtellM" "Content-Type" "application/json"}})
 
 (defn create-labels
   "Generates a sequence of labels for range responses."
