@@ -106,5 +106,5 @@
         @(http/post "https://fluidsurveys.com/api/v3/surveys/" (assoc fluidsurveys-options :form-params {:name title}))]
     (let [survey (parse-string body)]
       (let [{:keys [status headers body error] :as string}
-            @(http/put (get survey "survey_structure_uri") (assoc fluidsurveys-options :body json))] body)
+            @(http/put (get survey "survey_structure_uri") (assoc fluidsurveys-options :body json))] survey)
       ))))
