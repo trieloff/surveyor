@@ -99,11 +99,12 @@
 
 
 (defn post-survey
-  [json title]
+  ([json]
+   (post-survey json "Feature Survey"))
+  ([json title]
   (let [{:keys [status headers body error] :as string}
-         @(http/post "https://fluidsurveys.com/api/v3/surveys/" (assoc fluidsurveys-options :form-params {:name title}))]
-    (get (parse-string body) "survey_structure_uri")))
-
-
-
-(post-survey "" "hello")
+        @(http/post "https://fluidsurveys.com/api/v3/surveys/" (assoc fluidsurveys-options :form-params {:name title}))]
+    (let [survey (parse-string body)]
+      (let [{:keys [status headers body error] :as string}
+            @(http/put (get survey "survey_structure_uri") (assoc fluidsurveys-options :body json))] body)
+      ))))
