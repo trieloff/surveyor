@@ -14,21 +14,19 @@
   [& args]
   (println "Hello, World!"))
 
-(def filtered (take 3 (filter #(has-outcome %) (get-features "SBX-R-3"))))
-
-(map extract-custom filtered)
-
 ;(-> (map extract-custom filtered) create-survey post-survey)
 
-(update-survey-urls (map extract-custom filtered) "https://fluidsurveys.com/api/v3/surveys/717704/")
 
-(get-results {"responses_uri" "https://fluidsurveys.com/api/v3/surveys/717704/responses/"})
 
 ; MAIN PROGRAM FLOW
 ; #1 Select Release
+(def filtered (take 5 (filter #(has-outcome %) (get-features "SBX-R-3"))))
+(def features (map extract-custom filtered))
 ; #2 Create Survey
 ; #3 Save Survey to Features
+(update-survey-urls (map extract-custom filtered) "https://fluidsurveys.com/api/v3/surveys/717704/")
 ; #4 Run Survey
 ; #5 Retrieve Results
+(get-results {"responses_uri" "https://fluidsurveys.com/api/v3/surveys/717704/responses/"})
 ; #6 Interpret Results
 ; #7 Save Results as Scores
