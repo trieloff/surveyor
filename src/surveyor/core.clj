@@ -14,10 +14,10 @@
   [& args]
   (println "Hello, World!"))
 
-(def filtered (take 3 (filter #(has-outcome %) (get-features "BYP-R-1"))))
+(def filtered (take 3 (filter #(has-outcome %) (get-features "SBX-R-3"))))
 
-(map extract-outcome filtered)
+(map extract-custom filtered)
 
-(-> (map extract-outcome filtered) create-survey post-survey)
+;(-> (map extract-custom filtered) create-survey post-survey)
 
 (count (get-results {"responses_uri" "https://fluidsurveys.com/api/v3/surveys/717704/responses/"}))

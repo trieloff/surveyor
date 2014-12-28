@@ -18,7 +18,7 @@
                #(and (= (get % "key") "outcome") (not= (get % "value") ""))
                (get feature "custom_fields")))))
 
-(defn extract-outcome
+(defn extract-custom
   "Extracts the outcome custom field from a feature"
   [feature]
   (hash-map
