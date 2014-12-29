@@ -96,7 +96,44 @@
   ;)(generate-string features)
   )
 
+(map ulwick-opportunity (strip-results (get-results {"responses_uri"
+ "https://fluidsurveys.com/api/v3/surveys/717770/responses/"})))
 
+
+(defn calculate-ulwick-opportunity
+  [importance satisfaction]
+  (+ importance (max (- importance satisfaction) 0))
+)
+
+(defn ulwick-opportunity
+  [result]
+  (reduce-kv
+   (fn [mymap key value]
+     (if (re-find #"ulwick-importance_[0-9]+" key)
+       (assoc mymap
+         (string/replace key "-importance_" "-opportunity_")
+         (calculate-ulwick-opportunity value (get mymap (string/replace key "-importance_" "-satisfaction_"))))
+       mymap))
+   result result)
+)
+
+(defn filter-result-keys
+  [result key value]
+  (if (re-find #"[0-9]+$" key)
+    (assoc result key value)
+    result
+    )
+)
+
+(defn strip-result
+  [result]
+  (reduce-kv filter-result-keys {} result)
+)
+
+(defn strip-results
+  [responses]
+  (map strip-result responses)
+)
 
 (defn post-survey
   ([json]
