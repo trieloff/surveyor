@@ -16,7 +16,7 @@
 
 (defn make-survey-for-release
   [release]
-  (let [filtered (filter #(has-outcome %) (get-features "SBX-R-3"))
+  (let [filtered (filter #(has-outcome %) (get-features release))
         features (map extract-custom filtered)
         survey (-> features create-survey post-survey)]
     (do
