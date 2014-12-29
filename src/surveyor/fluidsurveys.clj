@@ -1,6 +1,6 @@
 (in-ns 'surveyor.core)
 
-(def likert [ {"code" "like", "score" "", "label"
+(def likert [ {"code" "like", "label"
                {"en" "I like it"}}
               {"code" "must", "label"
                {"en" "I expect it"}}
@@ -96,9 +96,27 @@
   ;)(generate-string features)
   )
 
-(map ulwick-opportunity (strip-results (get-results {"responses_uri"
- "https://fluidsurveys.com/api/v3/surveys/717770/responses/"})))
+(map kano-score (map ulwick-opportunity (strip-results (get-results {"responses_uri"
+ "https://fluidsurveys.com/api/v3/surveys/717770/responses/"}))))
 
+(defn calculate-kano-score
+  [positive negative]
+  "invalid"
+)
+
+(re-find #"kano-posititive_[0-9]+" "kano-posititive_1")
+
+(defn kano-score
+  [result]
+  (reduce-kv
+   (fn [mymap key value]
+     (if (re-find #"kano-posititive_[0-9]+" key)
+       (assoc mymap
+         (string/replace key "-posititive_" "-score_")
+         (calculate-kano-score value (get mymap (string/replace key "-posititive_" "-negative_"))))
+       mymap))
+   result result)
+)
 
 (defn calculate-ulwick-opportunity
   [importance satisfaction]
