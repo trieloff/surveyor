@@ -11,6 +11,14 @@
               {"code" "dislike", "label"
                {"en" "I dislike it"}}])
 
+(def kano-matrix {
+ [0 0] "questionable" [0 1] "attractive" [0 2] "attractive" [0 3] "attractive" [0 4] "one-dimensional"
+ [1 0] "reverse" [1 1] "indifferent" [1 2] "indifferent" [1 3] "indifferent" [1 4] "must-be"
+ [2 0] "reverse" [2 1] "indifferent" [2 2] "indifferent" [2 3] "indifferent" [2 4] "must-be"
+ [3 0] "reverse" [3 1] "indifferent" [3 2] "indifferent" [3 3] "indifferent" [3 4] "must-be"
+ [4 0] "reverse" [4 1] "reverse" [4 2] "reverse" [4 3] "reverse" [4 4] "questionable"
+})
+
 ; bad, bad coder!
 (def fluidsurveys-options {:timeout 2000             ; ms
               :headers {"Authorization" "Basic bGFyc0B0cmllbG9mZi5uZXQ6SDhwLVQ1Ui03YTYtellM" "Content-Type" "application/json"}})
@@ -101,7 +109,7 @@
 
 (defn calculate-kano-score
   [positive negative]
-  "invalid"
+  (kano-matrix (vector negative positive))
 )
 
 (re-find #"kano-posititive_[0-9]+" "kano-posititive_1")
