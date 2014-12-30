@@ -149,7 +149,7 @@
 
 (defn calculate-kano-score
   [positive negative]
-  (kano-matrix (vector negative positive))
+  (kano-matrix (vector positive negative))
 )
 
 (re-find #"kano-posititive_[0-9]+" "kano-posititive_1")
