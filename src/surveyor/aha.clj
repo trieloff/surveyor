@@ -63,6 +63,29 @@
 
 )
 
+(defn update-tags
+  [feature tags]
+  (let [{:keys [status headers body error] :as string}
+       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"tags" (string/join "," tags)}})))]
+   body)
+)
+
+(defn update-score
+  [feature scores]
+  (let [{:keys [status headers body error] :as string}
+        @(http/put
+          (str "https://blue-yonder.aha.io/api/v1/features/" feature)
+          (assoc aha-options :body (generate-string {"feature" {"score_facts"
+                                                                (filter #(not (nil? %)) (map (fn [[key value]]
+                                                                                               (if (score-names key)
+                                                                                                 {"name" (score-names key) "value" value}))(vec scores)))}})))]
+    body)
+  )
+
+(update-score "SBX-17" {"ulwick-importance" 8, "ulwick-opportunity" 12, "kano-negative" 3, "kano-score" "reverse", "kano-posititive" 1, "ulwick-satisfaction" 4})
+
+
+
 (defn update-survey-urls
   [features survey]
  (map-indexed (fn [index item] (update-survey-url (get item "reference_num") survey index)) features)
