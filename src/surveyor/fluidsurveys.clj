@@ -110,10 +110,6 @@
 (defn map-a-map [f m]
   (into {} (for [[k v] m] [k (f v)])))
 
-(def bla {"2" [["ulwick-importance_2" 6] ["ulwick-opportunity_2" 10] ["kano-negative_2" 2] ["kano-score_2" "indifferent"] ["kano-posititive_2" 2] ["ulwick-satisfaction_2" 2] ["ulwick-importance_2" 9] ["ulwick-opportunity_2" 10] ["kano-negative_2" 4] ["kano-score_2" "reverse"] ["kano-posititive_2" 1] ["ulwick-satisfaction_2" 8] ["ulwick-importance_2" 9] ["ulwick-opportunity_2" 16] ["kano-negative_2" 4] ["kano-score_2" "reverse"] ["kano-posititive_2" 0] ["ulwick-satisfaction_2" 2]], "3" [["ulwick-importance_3" 3] ["ulwick-opportunity_3" 3] ["kano-negative_3" 3] ["kano-posititive_3" 2] ["kano-score_3" "indifferent"] ["ulwick-satisfaction_3" 4] ["ulwick-importance_3" 9] ["ulwick-opportunity_3" 14] ["kano-negative_3" 4] ["kano-posititive_3" 0] ["kano-score_3" "reverse"] ["ulwick-satisfaction_3" 4] ["ulwick-importance_3" 8] ["ulwick-opportunity_3" 13] ["kano-negative_3" 4] ["kano-posititive_3" 1] ["kano-score_3" "reverse"] ["ulwick-satisfaction_3" 3]], "1" [["ulwick-importance_1" 5] ["kano-score_1" "reverse"] ["kano-negative_1" 4] ["ulwick-opportunity_1" 6] ["ulwick-satisfaction_1" 4] ["kano-posititive_1" 1] ["ulwick-importance_1" 1] ["kano-score_1" "indifferent"] ["kano-negative_1" 2] ["ulwick-opportunity_1" 1] ["ulwick-satisfaction_1" 6] ["kano-posititive_1" 2] ["ulwick-importance_1" 4] ["kano-score_1" "reverse"] ["kano-negative_1" 2] ["ulwick-opportunity_1" 5] ["ulwick-satisfaction_1" 3] ["kano-posititive_1" 0]], "0" [["ulwick-satisfaction_0" 3] ["kano-posititive_0" 0] ["kano-negative_0" 4] ["ulwick-opportunity_0" 11] ["kano-score_0" "reverse"] ["ulwick-importance_0" 7] ["ulwick-satisfaction_0" 6] ["kano-posititive_0" 2] ["kano-negative_0" 2] ["ulwick-opportunity_0" 1] ["kano-score_0" "indifferent"] ["ulwick-importance_0" 1] ["ulwick-satisfaction_0" 6] ["kano-posititive_0" 0] ["kano-negative_0" 2] ["ulwick-opportunity_0" 3] ["kano-score_0" "reverse"] ["ulwick-importance_0" 3]]})
-
-(aggregate-results (group-by-question bla))
-
 (defn remove-labels
   [labeled]
   (filter #(or (number? %) (contains? (set (vals kano-matrix)) %)) (flatten labeled))
