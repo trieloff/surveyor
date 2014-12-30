@@ -47,10 +47,11 @@
   [release]
   (let [filtered (filter #(has-outcome %) (get-features release))
         features (map extract-custom filtered)
-        survey (post-survey (create-survey release features) release)]
-    (do
-      (update-survey-urls (map extract-custom filtered) (get survey "survey_uri"))
-      (get survey "deploy_url")))
+        survey (post-survey (create-survey release features) release)
+        api_url (get survey "survey_uri")
+        updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url)))
+        deploy_url (get survey "deploy_url")]
+      deploy_url)
 )
 
 

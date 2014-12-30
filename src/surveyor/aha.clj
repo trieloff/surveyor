@@ -59,7 +59,7 @@
   [feature survey index]
  (let [{:keys [status headers body error] :as string}
        @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"custom_fields" {"survey" (str survey "#" index)}}})))]
-   body)
+   status)
 
 )
 
