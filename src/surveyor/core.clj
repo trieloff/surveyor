@@ -8,6 +8,7 @@
   (:require [org.httpkit.client :as http]))
 
 (load "aha")
+(load "aggregates")
 (load "fluidsurveys")
 
 (defn -main
