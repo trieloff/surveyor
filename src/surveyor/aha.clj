@@ -4,6 +4,15 @@
 
               :headers {"Authorization" "Bearer 4ae035c900cfc348ac8a1c7679c858928653995424b223db14c4328d621de354" "Content-Type" "application/json"}})
 
+
+(def score-names {"ulwick-importance"   "Importance"
+                  "ulwick-opportunity"  "Opportunity"
+                  "ulwick-satisfaction" "Satisfaction"})
+
+(def tag-names {"one-dimensional" "linear"
+                "must-be" "must-be"
+                "attractive" "exciter"})
+
 (defn feature-details
   "Retrieves the detailed feature description for a given feature from a
   feature list. The passed feature object needs to have a 'resource' key."
