@@ -7,6 +7,6 @@
                  [http-kit "2.1.16"]
                  [clj-time "0.6.0"]
                  [cheshire "5.3.1"]]
-  :main ^:skip-aot surveyor.core
+  :main surveyor.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
