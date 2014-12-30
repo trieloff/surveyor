@@ -27,13 +27,25 @@
 )
 
 
-(defn save-results-for-release
+(defn merge-results-for-release
   [release]
-  (let [features (map extract-custom (filter #(has-survey %)(get-features release)))
+  (apply concat (let [features (map extract-custom (filter #(has-survey %)(get-features release)))
         surveys (group-by #(first (string/split (get % "survey") #"#")) features)]
-    (doseq [[survey featurelist] surveys]
-      (pprint/pprint {"responses_uri" (str survey "responses/")}))
-    )
+    (for [[survey featurelist] surveys]
+      (let [survey-results (aggregate-results
+                      (group-by-question
+                       (group-by-feature
+                        (map
+                         kano-score (map
+                                     ulwick-opportunity
+                                     (strip-results
+                                      (get-results {"responses_uri" (str survey "responses/")})))))))]
+        (map #(hash-map
+               "feature" (get % "reference_num")
+               "survey" (first (string/split (get % "survey") #"#"))
+               "response" (last (string/split (get % "survey") #"#"))
+               "results" (get survey-results (last (string/split (get % "survey") #"#")))) featurelist)))
+    ))
 )
 
 ; MAIN PROGRAM FLOW
@@ -41,10 +53,7 @@
 ;(println (str "Please join the " "SBX-R-3" " feature survey at " (make-survey-for-release "SBX-R-3")))
 
 ; #5 Retrieve Results
-;(save-results-for-release "SBX-R-3")
-
-(strip-results (get-results {"responses_uri"
- "https://fluidsurveys.com/api/v3/surveys/717770/responses/"}))
+(merge-results-for-release "SBX-R-3")
 
 ; #6 Interpret Results
 ; #7 Save Results as Scores
