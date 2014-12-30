@@ -48,12 +48,20 @@
     ))
 )
 
+(defn save-results-for-release
+  [merged-results]
+  (doseq [result merged-results]
+    (update-tags (get result "feature") (get result "results"))
+    (update-score (get result "feature") (get result "results"))
+  )
+)
+
 ; MAIN PROGRAM FLOW
 
 ;(println (str "Please join the " "SBX-R-3" " feature survey at " (make-survey-for-release "SBX-R-3")))
 
 ; #5 Retrieve Results
-(merge-results-for-release "SBX-R-3")
+(save-results-for-release (merge-results-for-release "SBX-R-3"))
 
 ; #6 Interpret Results
 ; #7 Save Results as Scores
