@@ -65,9 +65,12 @@
 
 (defn update-tags
   [feature tags]
-  (let [{:keys [status headers body error] :as string}
-       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"tags" (string/join "," tags)}})))]
-   body)
+  (let [taglist (filter #(not (nil? %)) (map (fn [[key value]] (if (= "kano-score" key) (tag-names value))) tags))]
+    (if (seq taglist)
+      (let [{:keys [status headers body error] :as string}
+       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"tags" (string/join "," taglist)}})))]
+   body)))
+
 )
 
 (defn update-score
@@ -82,9 +85,7 @@
     body)
   )
 
-(update-score "SBX-17" {"ulwick-importance" 8, "ulwick-opportunity" 12, "kano-negative" 3, "kano-score" "reverse", "kano-posititive" 1, "ulwick-satisfaction" 4})
-
-
+(def example {"ulwick-importance" 8, "ulwick-opportunity" 12, "kano-negative" 3, "kano-score" "one-dimensional", "kano-posititive" 1, "ulwick-satisfaction" 4})
 
 (defn update-survey-urls
   [features survey]
