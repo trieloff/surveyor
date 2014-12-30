@@ -47,7 +47,7 @@
   [release]
   (let [filtered (filter #(has-outcome %) (get-features release))
         features (map extract-custom filtered)
-        survey (-> features create-survey post-survey)]
+        survey (post-survey (create-survey release features) release)]
     (do
       (update-survey-urls (map extract-custom filtered) (get survey "survey_uri"))
       (get survey "deploy_url")))

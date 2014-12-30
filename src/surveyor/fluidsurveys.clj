@@ -76,7 +76,7 @@
 (defn create-survey
   "Creates a JSON body for new surveys based on a list of features and
   outcomes"
-  [features]
+  [release features]
   (let [outcomes (map #(get % "outcome") features)]
   (generate-string
    {"structure" {"languages"
@@ -100,7 +100,7 @@
                                                "How would you feel if following outcomes are prevented, this means they cannot be achieved?"
                                                outcomes)
                          ]}],
-    "title" {"en" "Test Survey"}}}))
+    "title" {"en" (str "Survey for release " release)}}}))
   ;)(generate-string features)
   )
 
