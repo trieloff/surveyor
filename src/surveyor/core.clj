@@ -41,21 +41,6 @@
   (println msg)
   #_(System/exit status))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
-    ;; Handle help and error conditions
-    (cond
-      (:help options) (exit 0 (usage summary))
-      errors (exit 1 (error-msg errors)))
-    ;; Execute program with options
-    (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options)))))
-    (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options))))))
-    ))
-
-(-main "-s" "SBX-R-3")
-
 ;(-main "-u" "SBX-R-3")
 
 (defn make-survey-for-release
@@ -107,3 +92,18 @@
 
 ; #6 Interpret Results
 ; #7 Save Results as Scores
+
+(defn -main
+  "I don't do a whole lot ... yet."
+  [& args]
+  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
+    ;; Handle help and error conditions
+    (cond
+      (:help options) (exit 0 (usage summary))
+      errors (exit 1 (error-msg errors)))
+    ;; Execute program with options
+    (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options)))))
+    (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options))))))
+    ))
+
+(-main "-s" "SBX-R-3")
