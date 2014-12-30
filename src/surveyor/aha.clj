@@ -85,8 +85,6 @@
     body)
   )
 
-(def example {"ulwick-importance" 8, "ulwick-opportunity" 12, "kano-negative" 3, "kano-score" "one-dimensional", "kano-posititive" 1, "ulwick-satisfaction" 4})
-
 (defn update-survey-urls
   [features survey]
  (map-indexed (fn [index item] (update-survey-url (get item "reference_num") survey index)) features)
