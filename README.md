@@ -11,7 +11,7 @@ Download from https://github.com/trieloff/suveyor.
 ## Configuration
 
 Copy the file surveyor-default.properties into surveyor.properties and edit the settings. Each
-setting can also be overridden through an environment variable, so that aha.host becomes $AHA.HOST
+setting can also be overridden through an environment variable, so that `aha.host` becomes `$AHA_HOST`
 
 ## Usage
 
