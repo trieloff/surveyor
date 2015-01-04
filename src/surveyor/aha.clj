@@ -2,7 +2,7 @@
 
 (def aha-options {:timeout 2000             ; ms
 
-              :headers {"Authorization" "Bearer 4ae035c900cfc348ac8a1c7679c858928653995424b223db14c4328d621de354" "Content-Type" "application/json"}})
+              :headers {"Authorization" (str "Bearer " (config "aha.auth")) "Content-Type" "application/json"}})
 
 
 (def score-names {"ulwick-importance"   "Importance"
