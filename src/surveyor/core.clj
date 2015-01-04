@@ -8,9 +8,11 @@
   (:require [cheshire.core :refer :all])
   (:require [org.httpkit.client :as http]))
 
+(load "config")
 (load "aha")
 (load "aggregates")
 (load "fluidsurveys")
+
 
 (def cli-options
   [["-s" "--survey RELEASE" "Create a new survey for a release"
