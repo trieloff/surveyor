@@ -7,7 +7,14 @@
                  [http-kit "2.1.16"]
                  [clj-time "0.6.0"]
                  [org.clojure/tools.cli "0.3.1"]
+                 [compojure "1.1.6"]
+                 [hiccup "1.0.5"]
+                 [ring-server "0.3.1"]
                  [cheshire "5.3.1"]]
   :main surveyor.core
+  :plugins [[lein-ring "0.8.12"]]
+  :ring {:handler surveyor.handler/app
+         :init surveyor.handler/init
+         :destroy surveyor.handler/destroy}
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
