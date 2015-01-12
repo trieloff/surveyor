@@ -10,7 +10,7 @@
                  [compojure "1.1.6"]
                  [hiccup "1.0.5"]
                  [ring-server "0.3.1"]
-                 [cheshire "5.3.1"]]
+                 [friend-oauth2 "0.1.3"]]
   :main surveyor.core
   :plugins [[lein-ring "0.8.12"]]
   :ring {:handler surveyor.handler/app

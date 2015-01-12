@@ -5,5 +5,8 @@
 (defn home []
   (layout/common [:h1 "Hello World!"]))
 
+(defn unauthorized []
+  (layout/common [:h1 "Get off my lawn"]))
+
 (defroutes home-routes
   (GET "/" [] (home)))
