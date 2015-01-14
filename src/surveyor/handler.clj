@@ -60,10 +60,8 @@
     {:identity token
      :roles #{::user}})
 
-(defn token-fn [args &]
-  (println "args"))
-
 (def friend-config {:allow-anon? true
+                    :unauthorized-handler surveyor.routes.home/unauthorized
                     :workflows   [(oauth2/workflow
                                    {:client-config client-config
                                     :uri-config uri-config

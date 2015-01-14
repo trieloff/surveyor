@@ -26,8 +26,11 @@
                   [:li (link-to "/aha.nope" "Nope with aha.io")]
                   [:li (link-to "/status" "Get status")]]))
 
-(defn unauthorized []
-  (layout/common [:h1 "Get off my lawn"]))
+(defn unauthorized
+  [request]
+  {:status 403
+   :body (layout/common "Piss off, you do not have access to this resource."
+                        (link-to "/" "Back."))})
 
 (defroutes home-routes
   (GET "/" [] (home))
