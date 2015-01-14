@@ -25,7 +25,7 @@
   {:client-id (config "aha.clientid")
    :client-secret (config "aha.clientsecret")
    ;; TODO get friend-oauth2 to support :context, :path-info
-   :callback {:domain (config "aha.clientdomain") :path "/aha.callback"}})
+   :callback {:domain (str "https://" (config "aha.clientdomain")) :path "/aha.callback"}})
 
 (def uri-config
   {:authentication-uri {:url (str "https://" (config "aha.host") ".aha.io" "/oauth/authorize")
