@@ -7,7 +7,7 @@
                  [http-kit "2.1.16"]
                  [clj-time "0.6.0"]
                  [org.clojure/tools.cli "0.3.1"]
-                 [compojure "1.1.6"]
+                 [compojure "1.3.0"]
                  [hiccup "1.0.5"]
                  [ring-server "0.3.1"]
                  [friend-oauth2 "0.1.3"]]
@@ -16,5 +16,6 @@
   :ring {:handler surveyor.handler/app
          :init surveyor.handler/init
          :destroy surveyor.handler/destroy}
+;;  :ring {:handler surveyor.github/app}
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
