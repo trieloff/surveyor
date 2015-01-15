@@ -21,6 +21,10 @@
                     (for [x (surveyor.core/get-products token)]
                       [:li (link-to (str "/aha/" (:reference_prefix x)) (:name x))])])))
 
+(defn render-aha-product [product token request]
+  (println token)
+  (layout/common [:h1 product]))
+
 (defn home []
   (println "home")
   (layout/common [:h1 "Hello World!"]
@@ -39,6 +43,8 @@
   (GET "/" [] (home))
   (GET "/aha.nope" request
          (render-aha-info request))
+  (GET "/aha/:product" [product :as request]
+       (friend/authorize #{:surveyor.handler/user} (render-aha-product product (-> request :session :cemerick.friend/identity :current :access-token) request)))
   (GET "/aha.info" request
        (friend/authorize #{:surveyor.handler/user} (render-aha-info request)))
   (GET "/status" request
