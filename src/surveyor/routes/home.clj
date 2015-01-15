@@ -15,8 +15,11 @@
 
 (defn render-aha-info [request]
   (println "aha")
-  (layout/common [:h1 "Info about aha goes here"]
-                 [:p "No info"]))
+  (let [token (-> request :session :cemerick.friend/identity :current :access-token)]
+    (layout/common [:h1 "Info about aha goes here"]
+                   [:ul
+                    (for [x (surveyor.core/get-products token)]
+                      [:li x])])))
 
 (defn home []
   (println "home")

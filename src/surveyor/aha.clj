@@ -107,3 +107,6 @@
        (if (< (count features) 5)
          (map feature-details features)
          (lazy-seq (into features (get-features release (inc page)))))))))
+
+(defn get-products [token]
+  (vector "1ins" "2wei" "3rei" token))
