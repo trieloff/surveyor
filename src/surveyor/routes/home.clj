@@ -37,6 +37,6 @@
   (GET "/aha.nope" request
          (render-aha-info request))
   (GET "/aha.info" request
-       (friend/authorize #{::user} (render-aha-info request)))
+       (friend/authorize #{:surveyor.handler/user} (render-aha-info request)))
   (GET "/status" request
        (render-status-page request)))

@@ -58,7 +58,7 @@
   [token]
   (println "Habenus token: " token)
     {:identity token
-     :roles #{::user}})
+     :roles #{:surveyor.handler/user}})
 
 (def friend-config {:allow-anon? true
                     :unauthorized-handler surveyor.routes.home/unauthorized
