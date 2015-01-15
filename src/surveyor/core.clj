@@ -3,7 +3,7 @@
   (:require [clojure.pprint :as pprint])
   (:require [clj-time.core :as datetime])
   (:require [clj-time.format :as timeformat])
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as string :refer [join replace upper-case]])
   (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [cheshire.core :refer :all])
   (:require [org.httpkit.client :as http]))

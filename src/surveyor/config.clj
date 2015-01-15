@@ -1,5 +1,4 @@
 (use 'clojure.java.io)
-(use 'clojure.string)
 
 (defn load-props
   ([file-name] (load-props file-name {}))
@@ -12,7 +11,7 @@
 )
 
 (defn override-props [config]
-  (reduce merge config (map (fn [[key value]] {key (or (System/getenv(upper-case (replace key #"\." "_"))) value)}) (vec config) ))
+  (reduce merge config (map (fn [[key value]] {key (or (System/getenv(string/upper-case (string/replace key #"\." "_"))) value)}) (vec config) ))
 )
 
 (def load-config (memoize #(override-props (load-props "surveyor.properties" (load-props "surveyor-default.properties")))))
