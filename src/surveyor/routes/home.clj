@@ -19,7 +19,7 @@
     (layout/common [:h1 "Info about aha goes here"]
                    [:ul
                     (for [x (surveyor.core/get-products token)]
-                      [:li x])])))
+                      [:li (link-to (str "/aha/" (:reference_prefix x)) (:name x))])])))
 
 (defn home []
   (println "home")

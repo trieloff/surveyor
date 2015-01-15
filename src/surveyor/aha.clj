@@ -108,5 +108,12 @@
          (map feature-details features)
          (lazy-seq (into features (get-features release (inc page)))))))))
 
+(defn token-options [token]
+  (assoc-in aha-options [:headers "Authorization"] (str "Bearer " token))
+)
+
 (defn get-products [token]
-  (vector "1ins" "2wei" "3rei" token))
+  (let [{:keys [status headers body error] :as string}
+         @(http/get "https://blue-yonder.aha.io/api/v1/products"
+                    (token-options token))]
+    (filter #(not (:product_line %)) (:products (parse-string body true)))))
