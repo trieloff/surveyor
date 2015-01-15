@@ -3,7 +3,6 @@
   (:require [clojure.pprint :as pprint])
   (:require [clj-time.core :as datetime])
   (:require [clj-time.format :as timeformat])
-  (:require [clojure.string :as string :refer [join replace upper-case]])
   (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [cheshire.core :refer :all])
   (:require [org.httpkit.client :as http]))
@@ -33,11 +32,11 @@
         options-summary
         ""
         "Please refer to the manual page for more information."]
-       (string/join \newline)))
+       (clojure.string/join \newline)))
 
 (defn error-msg [errors]
   (str "The following errors occurred while parsing your command:\n\n"
-       (string/join \newline errors)))
+       (clojure.string/join \newline errors)))
 
 (defn exit [status msg]
   (println msg)
@@ -60,7 +59,7 @@
 (defn merge-results-for-release
   [release]
   (apply concat (let [features (map extract-custom (filter #(has-survey %)(get-features release)))
-        surveys (group-by #(first (string/split (get % "survey") #"#")) features)]
+        surveys (group-by #(first (clojure.string/split (get % "survey") #"#")) features)]
     (for [[survey featurelist] surveys]
       (let [survey-results (aggregate-results
                       (group-by-question
@@ -72,9 +71,9 @@
                                       (get-results {"responses_uri" (str survey "responses/")})))))))]
         (map #(hash-map
                "feature" (get % "reference_num")
-               "survey" (first (string/split (get % "survey") #"#"))
-               "response" (last (string/split (get % "survey") #"#"))
-               "results" (get survey-results (last (string/split (get % "survey") #"#")))) featurelist)))
+               "survey" (first (clojure.string/split (get % "survey") #"#"))
+               "response" (last (clojure.string/split (get % "survey") #"#"))
+               "results" (get survey-results (last (clojure.string/split (get % "survey") #"#")))) featurelist)))
     ))
 )
 

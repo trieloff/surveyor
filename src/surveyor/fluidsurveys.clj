@@ -132,12 +132,12 @@
                 remove-labels
                 (group-by (fn
                            [el]
-                           (string/replace (first el) #"_.*" "")) results))) featuremap)
+                           (clojure.string/replace (first el) #"_.*" "")) results))) featuremap)
 )
 
 (defn group-by-feature
   [results]
-  (group-by (fn [el] (string/replace (first el) #".*_" ""))
+  (group-by (fn [el] (clojure.string/replace (first el) #".*_" ""))
             (mapcat identity (map
                     (fn [el] (seq el))
                     results)))
@@ -156,8 +156,8 @@
    (fn [mymap key value]
      (if (re-find #"kano-posititive_[0-9]+" key)
        (assoc mymap
-         (string/replace key "-posititive_" "-score_")
-         (calculate-kano-score value (get mymap (string/replace key "-posititive_" "-negative_"))))
+         (clojure.string/replace key "-posititive_" "-score_")
+         (calculate-kano-score value (get mymap (clojure.string/replace key "-posititive_" "-negative_"))))
        mymap))
    result result)
 )
@@ -173,8 +173,8 @@
    (fn [mymap key value]
      (if (re-find #"ulwick-importance_[0-9]+" key)
        (assoc mymap
-         (string/replace key "-importance_" "-opportunity_")
-         (calculate-ulwick-opportunity value (get mymap (string/replace key "-importance_" "-satisfaction_"))))
+         (clojure.string/replace key "-importance_" "-opportunity_")
+         (calculate-ulwick-opportunity value (get mymap (clojure.string/replace key "-importance_" "-satisfaction_"))))
        mymap))
    result result)
 )

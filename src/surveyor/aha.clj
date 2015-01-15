@@ -68,7 +68,7 @@
   (let [taglist (filter #(not (nil? %)) (map (fn [[key value]] (if (= "kano-score" key) (tag-names value))) tags))]
     (if (seq taglist)
       (let [{:keys [status headers body error] :as string}
-       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"tags" (string/join "," taglist)}})))]
+       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"tags" (clojure.string/join "," taglist)}})))]
    body)))
 
 )
