@@ -22,8 +22,6 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
-(def config-auth {:roles #{::user}})
-
 (def client-config
   {:client-id (config "aha.clientid")
    :client-secret (config "aha.clientsecret")
@@ -69,7 +67,6 @@
 ;;                                    :config-auth config-auth
                                     :credential-fn credential-fn
                                     })
-;;                                   #(println "workflow" %)
                                   ]})
 
 (def app
@@ -77,8 +74,7 @@
       (friend/authenticate friend-config)
       (wrap-base-url)
       (ring.middleware.session/wrap-session)
-      (ring.middleware.keyword-params/wrap-keyword-params)
-      ))
+      (ring.middleware.keyword-params/wrap-keyword-params)))
 
 
 ;; {:allow-anon? true
