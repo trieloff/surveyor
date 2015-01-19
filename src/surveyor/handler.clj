@@ -74,6 +74,7 @@
       (friend/authenticate friend-config)
       (wrap-base-url)
       (ring.middleware.session/wrap-session)
+      (ring.middleware.params/wrap-params)
       (ring.middleware.keyword-params/wrap-keyword-params)))
 
 
