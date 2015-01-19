@@ -1,4 +1,8 @@
-(in-ns 'surveyor.core)
+(ns surveyor.fluidsurveys
+  (:require [cheshire.core :refer :all])
+  (:require [org.httpkit.client :as http])
+  (:require [surveyor.aggregates :refer :all])
+  (:require [surveyor.config :refer :all]))
 
 (def likert [ {"code" "like", "label"
                {"en" "I like it"}}

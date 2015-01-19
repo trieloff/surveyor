@@ -1,6 +1,7 @@
 (ns surveyor.core-test
   (:require [clojure.test :refer :all]
             [surveyor.core :refer :all]
+            [surveyor.fluidsurveys :refer :all]
             [clojure.data :refer :all]))
 
 (deftest a-test

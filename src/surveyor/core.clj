@@ -5,12 +5,10 @@
   (:require [clj-time.format :as timeformat])
   (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [cheshire.core :refer :all])
+  (:require [surveyor.config :refer :all])
+  (:require [surveyor.aha :refer :all])
+  (:require [surveyor.fluidsurveys :refer :all])
   (:require [org.httpkit.client :as http]))
-
-(load "config")
-(load "aha")
-(load "aggregates")
-(load "fluidsurveys")
 
 
 (def cli-options

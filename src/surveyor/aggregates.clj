@@ -1,4 +1,4 @@
-(in-ns 'surveyor.core)
+(ns surveyor.aggregates)
 
 (defn mean [coll]
    (/ (reduce + coll) (count coll)))

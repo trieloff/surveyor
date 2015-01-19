@@ -8,7 +8,7 @@
             [cemerick.friend :as friend]
             [surveyor.workflow :as oauth2]
             [friend-oauth2.util     :refer [format-config-uri get-access-token-from-params extract-access-token]]
-            [surveyor.core :refer [config]]
+            [surveyor.config :refer [config]]
             [surveyor.routes.home :refer [home-routes]]))
 
 (defn init []

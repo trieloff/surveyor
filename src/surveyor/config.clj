@@ -1,4 +1,5 @@
-(use 'clojure.java.io)
+(ns surveyor.config
+  (:require [clojure.java.io :refer :all]))
 
 (defn load-props
   ([file-name] (load-props file-name {}))
@@ -17,5 +18,4 @@
 (def load-config (memoize #(override-props (load-props "surveyor.properties" (load-props "surveyor-default.properties")))))
 
 (defn config [key]
-  (get (load-config) key "")
-)
+  (get (load-config) key ""))

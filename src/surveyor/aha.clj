@@ -1,4 +1,7 @@
-(in-ns 'surveyor.core)
+(ns surveyor.aha
+  (:require [cheshire.core :refer :all])
+  (:require [org.httpkit.client :as http])
+  (:require [surveyor.config :refer :all]))
 
 (def aha-options {:timeout 2000             ; ms
 

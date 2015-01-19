@@ -2,6 +2,7 @@
   (:require [compojure.core :refer :all]
             [hiccup.element :refer :all]
             [cemerick.friend :as friend]
+            [surveyor.aha :as aha]
             [surveyor.views.layout :as layout]))
 
 
@@ -18,7 +19,7 @@
   (let [token (-> request :session :cemerick.friend/identity :current :access-token)]
     (layout/common [:h1 "Select Product"]
                    [:ul
-                    (for [x (surveyor.core/get-products token)]
+                    (for [x (aha/get-products token)]
                       [:li (link-to (str "/aha/" (:reference_prefix x)) (:name x))])])))
 
 (defn render-aha-product [product token request]
@@ -26,7 +27,7 @@
   (layout/common [:h1 "Select Release"]
                  (link-to "/aha.info" "back")
                  [:ul
-                  (for [x (surveyor.core/get-releases product token)]
+                  (for [x (aha/get-releases product token)]
                     [:li (link-to (str "/aha/" (:reference_prefix x)) (:name x)) " – " (-> x :workflow_status :name)])]))
 
 (defn home []
