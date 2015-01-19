@@ -117,3 +117,15 @@
          @(http/get "https://blue-yonder.aha.io/api/v1/products"
                     (token-options token))]
     (filter #(not (:product_line %)) (:products (parse-string body true)))))
+
+(defn get-release-details [release token]
+  (let [{:keys [status headers body error] :as string}
+         @(http/get (str "https://blue-yonder.aha.io/api/v1/releases/" release)
+                    (token-options token))]
+    (identity (:release (parse-string body true)))))
+
+(defn get-releases [product token]
+  (let [{:keys [status headers body error] :as string}
+         @(http/get (str "https://blue-yonder.aha.io/api/v1/products/" product "/releases")
+                    (token-options token))]
+    (map #(get-release-details (get % :reference_num) token) (:releases (parse-string body true)))))

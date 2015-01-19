@@ -16,14 +16,18 @@
 (defn render-aha-info [request]
   (println "aha")
   (let [token (-> request :session :cemerick.friend/identity :current :access-token)]
-    (layout/common [:h1 "Info about aha goes here"]
+    (layout/common [:h1 "Select Product"]
                    [:ul
                     (for [x (surveyor.core/get-products token)]
                       [:li (link-to (str "/aha/" (:reference_prefix x)) (:name x))])])))
 
 (defn render-aha-product [product token request]
   (println token)
-  (layout/common [:h1 product]))
+  (layout/common [:h1 "Select Release"]
+                 (link-to "/aha.info" "back")
+                 [:ul
+                  (for [x (surveyor.core/get-releases product token)]
+                    [:li (link-to (str "/aha/" (:reference_prefix x)) (:name x)) " – " (-> x :workflow_status :name)])]))
 
 (defn home []
   (println "home")
