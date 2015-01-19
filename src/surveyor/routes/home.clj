@@ -28,7 +28,11 @@
                  (link-to "/aha.info" "back")
                  [:ul
                   (for [x (aha/get-releases product token)]
-                    [:li (link-to (str "/aha/" (:reference_prefix x)) (:name x)) " – " (-> x :workflow_status :name)])]))
+                    [:li x (link-to (str "/aha/" product "/" (:reference_num x)) (:name x)) " – " (-> x :workflow_status :name)])]))
+
+(defn render-aha-release [product release token request]
+  (layout/common [:h1 "This is a release"]
+                 (link-to (str "/aha/" product) "back")))
 
 (defn home []
   (println "home")
@@ -48,6 +52,8 @@
   (GET "/" [] (home))
   (GET "/aha.nope" request
          (render-aha-info request))
+  (GET "/aha/:product/:release" [product release :as request]
+       (friend/authorize #{:surveyor.handler/user} (render-aha-release product release (-> request :session :cemerick.friend/identity :current :access-token) request)))
   (GET "/aha/:product" [product :as request]
        (friend/authorize #{:surveyor.handler/user} (render-aha-product product (-> request :session :cemerick.friend/identity :current :access-token) request)))
   (GET "/aha.info" request
