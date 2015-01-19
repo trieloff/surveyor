@@ -131,4 +131,6 @@
   (let [{:keys [status headers body error] :as string}
          @(http/get (str "https://blue-yonder.aha.io/api/v1/products/" product "/releases")
                     (token-options token))]
-    (map #(get-release-details (get % :reference_num) token) (:releases (parse-string body true)))))
+    (filter #(= "Under consideration" (-> % :workflow_status :name)) (map
+     #(get-release-details (get % :reference_num) token)
+     (:releases (parse-string body true))))))
