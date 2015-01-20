@@ -4,6 +4,7 @@
             [hiccup.form :refer :all]
             [cemerick.friend :as friend]
             [surveyor.aha :as aha]
+            [surveyor.core :as core]
             [surveyor.views.layout :as layout]))
 
 
@@ -43,8 +44,13 @@
 
 (defn update-aha-release [product release token action request]
   (layout/common [:h1 "Updating a release"]
-;;                  [:code (str request)]
+                 ;;                  [:code (str request)]
                  [:p action]
+                 (if (= action "create")
+                   (let [survey (core/make-survey-for-release release token)]
+                     [:p "Survey has been created: "
+                      (link-to survey survey)])
+                   [:p "Stuff has been updated"])
                  (link-to (str "/aha/" product "/" release) "done.")))
 
 (defn home []

@@ -44,11 +44,12 @@
 
 (defn make-survey-for-release
   [release token]
-  (let [filtered (filter #(has-outcome %) (get-features release))
+  (let [filtered (filter #(has-outcome %) (get-features release token))
         features (map extract-custom filtered)
+        nop2 (println features)
         survey (post-survey (create-survey release features) release)
         api_url (get survey "survey_uri")
-        updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url)))
+        updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
         deploy_url (get survey "deploy_url")]
       deploy_url)
 )
@@ -103,10 +104,10 @@
       (:help options) (exit 0 (usage summary))
       errors (exit 1 (error-msg errors)))
     ;; Execute program with options
-    (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options)))))
+    (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options) token))))
     (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options) token) token))))
     ))
 
-;(-main "-s" "SBX-R-3")
+;(-main "-s" "SBX-R-1")
 
 ;(-main "-u" "SBX-R-3")
