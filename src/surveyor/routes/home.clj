@@ -65,6 +65,8 @@
   (GET "/" [] (home))
   (GET "/aha.nope" request
          (render-aha-info request))
+  (GET "/debug" [:as request]
+       (friend/authorize #{:surveyor.handler/user} (str request)))
   (GET "/aha/:product/:release" [product release :as request]
        (friend/authorize #{:surveyor.handler/user} (render-aha-release product release (-> request :session :cemerick.friend/identity :current :access-token) request)))
   (POST "/aha/:product/:release" [product release :as request]
