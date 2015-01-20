@@ -80,7 +80,7 @@
 (defn create-survey
   "Creates a JSON body for new surveys based on a list of features and
   outcomes"
-  [release features]
+  [release features name]
   (let [outcomes (map #(get % "outcome") features)]
   (generate-string
    {"structure" {"languages"

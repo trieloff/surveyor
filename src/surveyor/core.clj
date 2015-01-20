@@ -46,8 +46,8 @@
   [release token]
   (let [filtered (filter #(has-outcome %) (get-features release token))
         features (map extract-custom filtered)
-        nop2 (println features)
-        survey (post-survey (create-survey release features) release)
+        name (:name (get-product-detail (:product_id (get-release-details release token)) token))
+        survey (post-survey (create-survey release features name) release)
         api_url (get survey "survey_uri")
         updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
         deploy_url (get survey "deploy_url")]
