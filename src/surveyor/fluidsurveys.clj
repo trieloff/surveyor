@@ -77,6 +77,16 @@
    {"en" ""}}
   )
 
+(defn create-question-nps [name]
+  {"description" {"en" ""}
+   "title" {"en" (str "How likely is it that you would recommend " name " to a friend or colleague?")}
+   "idname" "net-promoter"
+   "children" [{"leftLabel" {"en" "Very Likely"}, "required" false, "showCatLabels" false, "rightLabel" {"en" "Not Likely"}, "flipOrder" true, "type" "drill-down", "display" "likert", "categories" [{"label" {"en" "Promoter"}, "choices" [{"score" 10, "label" {"en" "10"}} {"score" 9, "label" {"en" "9"}}]} {"label" {"en" "Passive"}, "choices" [{"score" 8, "label" {"en" "8"}} {"score" 7, "label" {"en" "7"}}]} {"label" {"en" "Detractor"}, "choices" [{"score" 6, "label" {"en" "6"}} {"score" 5, "label" {"en" "5"}} {"score" 4, "label" {"en" "4"}} {"score" 3, "label" {"en" "3"}} {"score" 2, "label" {"en" "2"}} {"score" 1, "label" {"en" "1"}} {"score" 0, "label" {"en" "0"}}]}]}]
+   "grouped" true
+   "type" "question"
+   "id" "nps"}
+)
+
 (defn create-survey
   "Creates a JSON body for new surveys based on a list of features and
   outcomes"
@@ -88,7 +98,7 @@
      {"code" "en", "name" "English", "isDefault" true}],
     "form" [
             {"type" "page",
-             "children" [
+             "children" [(create-question-nps name)
                          (create-question-ulwick "ulwick-importance"
                                                  "How import are the following outcomes to you?"
                                                  "least impotant" "most important" 0 10
