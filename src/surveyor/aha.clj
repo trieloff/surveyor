@@ -16,12 +16,16 @@
                 "must-be" "must-be"
                 "attractive" "exciter"})
 
+(defn token-options [token]
+  (assoc-in aha-options [:headers "Authorization"] (str "Bearer " token))
+)
+
 (defn feature-details
   "Retrieves the detailed feature description for a given feature from a
   feature list. The passed feature object needs to have a 'resource' key."
-  [feature]
+  [feature token]
   (let [{:keys [status headers body error] :as string}
-        @(http/get (get feature "resource") aha-options)]
+        @(http/get (get feature "resource") (token-options token))]
     (get (parse-string body) "feature")))
 
 (defn has-custom
@@ -59,29 +63,37 @@
 
 
 (defn update-survey-url
-  [feature survey index]
+  [feature survey index token]
  (let [{:keys [status headers body error] :as string}
-       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"custom_fields" {"survey" (str survey "#" index)}}})))]
+       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc (token-options token) :body (generate-string {"feature" {"custom_fields" {"survey" (str survey "#" index)}}})))]
    status)
 
 )
 
-(defn update-tags
-  [feature tags]
-  (let [taglist (filter #(not (nil? %)) (map (fn [[key value]] (if (= "kano-score" key) (tag-names value))) tags))]
-    (if (seq taglist)
-      (let [{:keys [status headers body error] :as string}
-       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc aha-options :body (generate-string {"feature" {"tags" (clojure.string/join "," taglist)}})))]
-   body)))
 
-)
+(defn get-tags
+  [feature token]
+  (let [details (feature-details {"resource" (str "https://blue-yonder.aha.io/api/v1/features/" feature)} token)]
+    (set (get details "tags"))))
+
+(defn merge-tags [oldtags newtags]
+  (clojure.set/union newtags (clojure.set/difference oldtags (set (vals tag-names)))))
+
+(defn update-tags
+  [feature tags token]
+  (let [taglist (set (filter #(not (nil? %)) (map (fn [[key value]] (if (= "kano-score" key) (tag-names value))) tags)))]
+    (if (seq taglist)
+      (let [alltags (merge-tags (get-tags feature token) taglist)
+            {:keys [status headers body error] :as string}
+       @(http/put (str "https://blue-yonder.aha.io/api/v1/features/" feature) (assoc (token-options token) :body (generate-string {"feature" {"tags" (clojure.string/join "," alltags)}})))]
+   taglist))))
 
 (defn update-score
-  [feature scores]
+  [feature scores token]
   (let [{:keys [status headers body error] :as string}
         @(http/put
           (str "https://blue-yonder.aha.io/api/v1/features/" feature)
-          (assoc aha-options :body (generate-string {"feature" {"score_facts"
+          (assoc (token-options token) :body (generate-string {"feature" {"score_facts"
                                                                 (filter #(not (nil? %)) (map (fn [[key value]]
                                                                                                (if (score-names key)
                                                                                                  {"name" (score-names key) "value" value}))(vec scores)))}})))]
@@ -89,31 +101,27 @@
   )
 
 (defn update-survey-urls
-  [features survey]
- (map-indexed (fn [index item] (update-survey-url (get item "reference_num") survey index)) features)
+  [features survey token]
+ (map-indexed (fn [index item] (update-survey-url (get item "reference_num") survey index token)) features)
 )
 
 (defn get-features
   "Retrieves a lazy seq of features for a given release, starting at the
   specified page. More features are retrieved until the end of the seq"
-  ([release]
-   (get-features release 1))
-  ([release page]
+  ([release token]
+   (get-features release 1 token))
+  ([release page token]
    (let [{:keys [status headers body error] :as string}
          @(http/get (str
                      "https://blue-yonder.aha.io/api/v1/releases/"
                      release
                      "/features?per_page=5&page="
-                     page) aha-options)]
+                     page) (token-options token))]
      (let [features
-           (pmap feature-details (get (parse-string body) "features"))]
+           (pmap #(feature-details % token) (get (parse-string body) "features"))]
        (if (< (count features) 5)
-         (map feature-details features)
-         (lazy-seq (into features (get-features release (inc page)))))))))
-
-(defn token-options [token]
-  (assoc-in aha-options [:headers "Authorization"] (str "Bearer " token))
-)
+         (map #(feature-details % token) features)
+         (lazy-seq (into features (get-features release (inc page) token))))))))
 
 (defn get-products [token]
   (let [{:keys [status headers body error] :as string}

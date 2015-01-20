@@ -43,7 +43,7 @@
 ;(-main "-u" "SBX-R-3")
 
 (defn make-survey-for-release
-  [release]
+  [release token]
   (let [filtered (filter #(has-outcome %) (get-features release))
         features (map extract-custom filtered)
         survey (post-survey (create-survey release features) release)
@@ -55,8 +55,8 @@
 
 
 (defn merge-results-for-release
-  [release]
-  (apply concat (let [features (map extract-custom (filter #(has-survey %)(get-features release)))
+  [release token]
+  (apply concat (let [features (map extract-custom (filter #(has-survey %)(get-features release token)))
         surveys (group-by #(first (clojure.string/split (get % "survey") #"#")) features)]
     (for [[survey featurelist] surveys]
       (let [survey-results (aggregate-results
@@ -76,10 +76,10 @@
 )
 
 (defn save-results-for-release
-  [merged-results]
+  [merged-results token]
   (doseq [result merged-results]
-    (update-tags (get result "feature") (get result "results"))
-    (update-score (get result "feature") (get result "results"))
+    (update-tags (get result "feature") (get result "results") token)
+    (update-score (get result "feature") (get result "results") token)
   )
 )
 
@@ -96,14 +96,17 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
+  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
+        token (config "aha.auth")]
     ;; Handle help and error conditions
     (cond
       (:help options) (exit 0 (usage summary))
       errors (exit 1 (error-msg errors)))
     ;; Execute program with options
     (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options)))))
-    (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options))))))
+    (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options) token) token))))
     ))
 
 ;(-main "-s" "SBX-R-3")
+
+;(-main "-u" "SBX-R-3")
