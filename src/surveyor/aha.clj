@@ -1,6 +1,7 @@
 (ns surveyor.aha
   (:require [cheshire.core :refer :all])
   (:require [org.httpkit.client :as http])
+  (:require [clojure.set :as set])
   (:require [surveyor.config :refer :all]))
 
 (def aha-options {:timeout 2000             ; ms
@@ -77,7 +78,7 @@
     (set (get details "tags"))))
 
 (defn merge-tags [oldtags newtags]
-  (clojure.set/union newtags (clojure.set/difference oldtags (set (vals tag-names)))))
+  (set/union newtags (set/difference oldtags (set (vals tag-names)))))
 
 (defn update-tags
   [feature tags token]
