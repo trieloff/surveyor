@@ -50,7 +50,10 @@
                    (let [survey (core/make-survey-for-release release token)]
                      [:p "Survey has been created: "
                       (link-to survey survey)])
-                   [:p "Stuff has been updated"])
+                   (let [result (core/save-results-for-release (core/merge-results-for-release release token) token)]
+                     [:p "Stuff has been updated"]
+                     [:code result]
+                     ))
                  (link-to (str "/aha/" product "/" release) "done.")))
 
 (defn home []
