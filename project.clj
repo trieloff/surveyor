@@ -16,6 +16,6 @@
   :ring {:handler surveyor.handler/app
          :init surveyor.handler/init
          :destroy surveyor.handler/destroy}
-;;  :ring {:handler surveyor.github/app}
+  :uberjar-name "surveyor-standalone.jar"
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
