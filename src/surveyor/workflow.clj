@@ -2,6 +2,7 @@
   (:require
    [friend-oauth2.util :as util]
    [cemerick.friend :as friend]
+   [ring.middleware.params :as ring-params]
    [clj-http.client :as client]
    [ring.util.request :as request]))
 
@@ -49,7 +50,7 @@
     (when (is-oauth2-callback? config request)
       ;; Extracts code from request if we are getting here via OAuth2 callback.
       ;; http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1.2
-      (let [myparams (:params (ring.middleware.params/params-request request))
+      (let [myparams (:params (ring-params/params-request request))
             state (get myparams "state")
             code (get myparams "code")
             error (get myparams "error")
