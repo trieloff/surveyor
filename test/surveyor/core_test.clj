@@ -4,10 +4,6 @@
             [surveyor.fluidsurveys :refer :all]
             [clojure.data :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 1 1))))
-
 (deftest label-generator
   (testing "Generation of scale labels"
     (is (= (create-labels 0 10) [
