@@ -32,3 +32,7 @@
 (defn stop-server []
   (.stop @server)
   (reset! server nil))
+
+(defn -main [& args]
+  (start-server args)
+)
