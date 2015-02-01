@@ -1,6 +1,7 @@
 (ns surveyor.repl
   (:use surveyor.handler
         ring.server.standalone
+        surveyor.config
         [ring.middleware file-info file]))
 
 (defonce server (atom nil))
@@ -19,6 +20,10 @@
 (defn start-server
   "used for starting the server in development mode from REPL"
   [& [port]]
+  (println "aha.host" (config "aha.host"))
+  (println "aha.clientid" (clojure.string/replace (config "aha.clientid") #"(.*)(....)" "•••$2"))
+  (println "aha.clientsecret" (clojure.string/replace (config "aha.clientsecret") #"(.*)(....)" "•••$2"))
+  (println "fluidsurveys.auth" (clojure.string/replace (config "fluidsurveys.auth") #"(.*)(....)" "•••$2"))
   (let [port (if port (Integer/parseInt (clojure.string/join "" port)) 3000)]
     (reset! server
             (serve (get-handler)
