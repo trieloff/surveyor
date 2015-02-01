@@ -21,6 +21,7 @@
   "used for starting the server in development mode from REPL"
   [& [port]]
   (println "aha.host" (config "aha.host"))
+  (println "aha.clientdomain" (config "aha.clientdomain"))
   (println "aha.clientid" (clojure.string/replace (config "aha.clientid") #"(.*)(....)" "•••$2"))
   (println "aha.clientsecret" (clojure.string/replace (config "aha.clientsecret") #"(.*)(....)" "•••$2"))
   (println "fluidsurveys.auth" (clojure.string/replace (config "fluidsurveys.auth") #"(.*)(....)" "•••$2"))
