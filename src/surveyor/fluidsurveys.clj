@@ -178,8 +178,8 @@
 
 (defn calculate-ulwick-opportunity
   [importance satisfaction]
-  (+ importance (max (- importance satisfaction) 0))
-)
+  (if (nil? satisfaction) nil
+  (+ importance (max (- importance satisfaction) 0))))
 
 (defn ulwick-opportunity
   [result]
