@@ -7,6 +7,8 @@
     (is (= (calculate-ulwick-opportunity 10 0) 20))
     (is (= (calculate-ulwick-opportunity 10 10) 10))
     (is (= (calculate-ulwick-opportunity 0 0) 0))
+    (is (= (calculate-ulwick-opportunity nil 10) nil))
+    (is (= (calculate-ulwick-opportunity nil nil) nil))
     (is (= (calculate-ulwick-opportunity 10 nil) nil))))
 
 (deftest kano-tester
