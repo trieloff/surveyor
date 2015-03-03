@@ -129,10 +129,10 @@
   (filter #(or (number? %) (contains? (set (vals kano-matrix)) %)) (flatten labeled))
 )
 
-(defn aggregate-results
-  [featuremap]
-  (map-a-map (fn [results] (map-a-map aggregate-scores results)) featuremap)
-)
+
+(defn filter-notnil [el]
+  (filter (fn [el] (not (nil? el))) el))
+
 
 (defn aggregate-scores [el]
   (let [cleanel (filter-notnil el)]
@@ -140,8 +140,10 @@
       (int (mean cleanel))
       (mode cleanel))))
 
-(defn filter-notnil [el]
-  (filter (fn [el] (not (nil? el))) el))
+(defn aggregate-results
+  [featuremap]
+  (map-a-map (fn [results] (map-a-map aggregate-scores results)) featuremap)
+)
 
 (defn group-by-question
   [featuremap]
