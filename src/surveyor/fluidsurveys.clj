@@ -131,12 +131,17 @@
 
 (defn aggregate-results
   [featuremap]
-  (map-a-map (fn [results] (map-a-map (fn[el]
-                                        (if (every? integer? el)
-                                          (int (mean el))
-                                          (mode el)
-                                          )) results)) featuremap)
+  (map-a-map (fn [results] (map-a-map aggregate-scores results)) featuremap)
 )
+
+(defn aggregate-scores [el]
+  (let [cleanel (filter-notnil el)]
+    (if (every? integer? cleanel)
+      (int (mean cleanel))
+      (mode cleanel))))
+
+(defn filter-notnil [el]
+  (filter (fn [el] (not (nil? el))) el))
 
 (defn group-by-question
   [featuremap]
