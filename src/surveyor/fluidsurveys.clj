@@ -100,11 +100,11 @@
             {"type" "page",
              "children" [(create-question-nps name)
                          (create-question-ulwick "ulwick-importance"
-                                                 "How import are the following outcomes to you?"
+                                                 "In your work, how important are the following outcomes to you?"
                                                  "least impotant" "most important" 0 10
                                                  outcomes)
                          (create-question-ulwick "ulwick-satisfaction"
-                                                 "How satisfied are you with the following outcomes?"
+                                                 "Considering the current state of things, how satisfied are you with the following outcomes right now?"
                                                  "not at all satisfied" "fully satisfied" 0 10
                                                  outcomes)
                          (create-question-kano "kano-posititive"
