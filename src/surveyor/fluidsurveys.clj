@@ -87,6 +87,36 @@
    "id" "nps"}
 )
 
+;;   {
+;;                     "description": {
+;;                         "en": "Are there other outcomes that would be highly important to you?"
+;;                     },
+;;                     "title": {
+;;                         "en": "Comments"
+;;                     },
+;;                     "idname": "text-response",
+;;                     "children": [
+;;                         {
+;;                             "type": "string",
+;;                             "has_cols": false,
+;;                             "required": false,
+;;                             "appearance": "full",
+;;                             "cols": ""
+;;                         }
+;;                     ],
+;;                     "type": "question",
+;;                     "id": "lWQlR73l40"
+;;                 }
+
+(defn create-question-freeform [name description]
+  {"description" {"en" description}
+   "title" {"en" "Comments"}
+   "idname" "text-response"
+   "children" [{"type" "string" "has_cols" false "required" false "appearance" "full" "cols" ""}]
+   "type" "question"
+   "id" name}
+)
+
 (defn create-survey
   "Creates a JSON body for new surveys based on a list of features and
   outcomes"
@@ -103,16 +133,19 @@
                                                  "In your work, how important are the following outcomes to you?"
                                                  "least impotant" "most important" 0 10
                                                  outcomes)
+                         (create-question-freeform "importance-freeform" "Are there other outcomes that would be highly important to you?")
                          (create-question-ulwick "ulwick-satisfaction"
                                                  "Considering the current state of things, how satisfied are you with the following outcomes right now?"
                                                  "not at all satisfied" "fully satisfied" 0 10
                                                  outcomes)
+                         (create-question-freeform "satisfaction-freeform" "Are there other outcomes you are either highly satisfied or unsatisfied with right now?")
                          (create-question-kano "kano-posititive"
                                                "How would you feel if following outcome would be achieved?"
                                                outcomes)
                          (create-question-kano "kano-negative"
                                                "How would you feel if following outcomes are prevented, this means they cannot be achieved?"
                                                outcomes)
+                         (create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")
                          ]}],
     "title" {"en" (str "Survey for release " release)}}}))
   ;)(generate-string features)
