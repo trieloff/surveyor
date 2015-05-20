@@ -108,6 +108,14 @@
 ;;                     "id": "lWQlR73l40"
 ;;                 }
 
+
+(def ideas-question { "description" {"en" "If you have additional ideas, please submit them to our <a rel=\"nofollow\" href=\"https://blue-yonder.ideas.aha.io\">Blue Yonder Ideas Portal</a>."}
+                      "title" {"en" "More Ideas"}
+                      "idname" "section-separator"
+                      "children" []
+                      "type" "question"
+                      "id" "ideas"})
+
 (defn create-question-freeform [name description]
   {"description" {"en" description}
    "title" {"en" "Comments"}
@@ -146,7 +154,7 @@
                                                "How would you feel if following outcomes are prevented, this means they cannot be achieved?"
                                                outcomes)
                          (create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")
-                         ]}],
+                         ideas-question]}],
     "title" {"en" (str "Survey for release " release)}}}))
   ;)(generate-string features)
   )
