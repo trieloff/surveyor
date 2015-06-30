@@ -43,7 +43,7 @@
 ;(-main "-u" "SBX-R-3")
 
 (defn make-survey-for-release
-  [release token]
+  ([release token]
   (let [filtered (filter #(has-outcome %) (get-features release token))
         features (map extract-custom filtered)
         name (:name (get-product-detail (:product_id (get-release-details release token)) token))
@@ -51,8 +51,12 @@
         api_url (get survey "survey_uri")
         updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
         deploy_url (get survey "deploy_url")]
-      deploy_url)
+      deploy_url))
+  ([release token filters]
+   (println "haha: " filters)
+   "nil")
 )
+
 
 
 (defn merge-results-for-release

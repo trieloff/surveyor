@@ -37,17 +37,24 @@
                  (link-to (str "/aha/" product) "back")
                  (form-to ["POST" (str "/aha/" product "/" release)]
                           (hidden-field "action" "create")
+                          [:div
+                            (check-box "filters" false "score")
+                            (label "filters" "Override scores")]
+                          [:div
+                            (check-box "filters" false "else")
+                            (label "filters" "Override something else")]
                           (submit-button "Create Survey"))
                  (form-to ["POST" (str "/aha/" product "/" release)]
                           (hidden-field "action" "retrieve")
                           (submit-button "Retrieve Results"))))
 
-(defn update-aha-release [product release token action request]
+(defn update-aha-release [product release token action filters request]
   (layout/common [:h1 "Updating a release"]
                  ;;                  [:code (str request)]
                  [:p action]
+;;                  [:code (str filters)]
                  (if (= action "create")
-                   (let [survey (core/make-survey-for-release release token)]
+                   (let [survey (core/make-survey-for-release release token filters)]
                      [:p "Survey has been created: "
                       (link-to survey survey)])
                    (let [result (core/save-results-for-release (core/merge-results-for-release release token) token)]
@@ -84,6 +91,7 @@
                                                      release
                                                      (-> request :session :cemerick.friend/identity :current :access-token)
                                                      (get (:params request) "action")
+                                                     (vec (map #(keyword "surveyor.aha" (str %)) (flatten (vector (get (:params request) "filters")))))
                                                      request)))
   (GET "/aha/:product" [product :as request]
        (friend/authorize #{:surveyor.handler/user} (render-aha-product product (-> request :session :cemerick.friend/identity :current :access-token) request)))
