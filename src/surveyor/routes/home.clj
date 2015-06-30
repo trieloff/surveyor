@@ -61,13 +61,13 @@
   (layout/common [:h1 "Hello World!"]
                  [:ul
                   [:li (link-to "/aha.info" "Login with aha.io")]
-                  [:li (link-to "/aha.nope" "Nope with aha.io")]
+                  [:li (link-to "/aha.nope" "Logout of aha.io")]
                   [:li (link-to "/status" "Get status")]]))
 
 (defn unauthorized
   [request]
   {:status 403
-   :body (layout/common "Piss off, you do not have access to this resource."
+   :body (layout/common "I'm very sorry, you do not have access to this resource."
                         (link-to "/" "Back."))})
 
 (defroutes home-routes
