@@ -41,8 +41,8 @@
                             (check-box "filters" false "score")
                             (label "filters" "Override scores")]
                           [:div
-                            (check-box "filters" false "else")
-                            (label "filters" "Override something else")]
+                            (check-box "filters" false "survey")
+                            (label "filters" "Override survey links")]
                           (submit-button "Create Survey"))
                  (form-to ["POST" (str "/aha/" product "/" release)]
                           (hidden-field "action" "retrieve")

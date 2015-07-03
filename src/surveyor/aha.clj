@@ -46,6 +46,25 @@
   (has-custom? feature "survey")
 )
 
+(defn has-empty-survey? [feature]
+  true)
+
+(defn has-score? [feature]
+  true)
+
+(defn has-empty-score? [feature]
+  true)
+
+(def feature-predictates {:surveyor.aha/score has-score?
+                          :surveyor.aha/empty-score has-empty-score?
+                          :surveyor.aha/survey has-survey?
+                          :surveyor.aha/empty-survey has-empty-survey?
+                          :surveyor.aha/outcome has-outcome?})
+
+(def feature-predictates-negative {:surveyor.aha/score :surveyor.aha/empty-score
+                                   :surveyor.aha/survey :surveyor.aha/empty-survey
+                                   :surveyor.aha/no-outcome :surveyor.aha/outcome})
+
 (defn extract-custom
   "Extracts the outcome custom field from a feature"
   [feature]
