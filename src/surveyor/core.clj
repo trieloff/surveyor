@@ -44,7 +44,7 @@
 
 (defn make-survey-for-release
   ([release token]
-  (let [filtered (filter #(has-outcome %) (get-features release token))
+  (let [filtered (filter #(has-outcome? %) (get-features release token))
         features (map extract-custom filtered)
         name (:name (get-product-detail (:product_id (get-release-details release token)) token))
         survey (post-survey (create-survey release features name) release)
@@ -54,14 +54,13 @@
       deploy_url))
   ([release token filters]
    (println "haha: " filters)
-   "nil")
-)
+   "nil"))
 
 
 
 (defn merge-results-for-release
   [release token]
-  (apply concat (let [features (map extract-custom (filter #(has-survey %)(get-features release token)))
+  (apply concat (let [features (map extract-custom (filter #(has-survey? %)(get-features release token)))
         surveys (group-by #(first (clojure.string/split (get % "survey") #"#")) features)]
     (for [[survey featurelist] surveys]
       (let [survey-results (aggregate-results

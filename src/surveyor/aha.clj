@@ -29,21 +29,21 @@
         @(http/get (get feature "resource") (token-options token))]
     (get (parse-string body) "feature")))
 
-(defn has-custom
+(defn has-custom?
   "Returns true if the passed feature has a specified custom field"
   [feature field]
   (= 1 (count (filter
                #(and (= (get % "key") "outcome") (not= (get % "value") ""))
                (get feature "custom_fields")))))
 
-(defn has-outcome
+(defn has-outcome?
   [feature]
-  (has-custom feature "outcome")
+  (has-custom? feature "outcome")
 )
 
-(defn has-survey
+(defn has-survey?
   [feature]
-  (has-custom feature "survey")
+  (has-custom? feature "survey")
 )
 
 (defn extract-custom
