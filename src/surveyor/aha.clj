@@ -1,5 +1,6 @@
 (ns surveyor.aha
   (:require [cheshire.core :refer :all])
+  (:require [clojure.pprint :as pprint])
   (:require [org.httpkit.client :as http])
   (:require [clojure.set :as set])
   (:require [surveyor.config :refer :all]))
@@ -33,12 +34,14 @@
   "Returns true if the passed feature has a specified custom field"
   [feature field]
   (= 1 (count (filter
-               #(and (= (get % "key") "outcome") (not= (get % "value") ""))
+               #(and (= (get % "key") field) (not= (get % "value") ""))
                (get feature "custom_fields")))))
 
 (defn has-outcome?
   [feature]
-  (has-custom? feature "outcome")
+  (do
+    (println "has-outcome?" (has-custom? feature "outcome"))
+    (has-custom? feature "outcome"))
 )
 
 (defn has-survey?
@@ -47,22 +50,36 @@
 )
 
 (defn has-empty-survey? [feature]
-  true)
+  (do
+    (println "has-empty-survey?" (not (has-survey? feature)))
+    ;;(pprint/pprint feature)
+    (not (has-survey? feature))))
 
 (defn has-score? [feature]
-  true)
+  "Returns true if the feature has a score. Returns true, even if the score is zero."
+  (do
+    (println "has-score?" true)
+    true))
 
 (defn has-empty-score? [feature]
-  true)
+  (do
+    (println "has-empty-score?" (= 0 (get feature "score")))
+    (= 0 (get feature "score"))))
+
+(defn is-being-considered? [feature]
+  (not= "Will not implement" (get (get feature "workflow_status") "name")))
 
 (def feature-predictates {:surveyor.aha/score has-score?
                           :surveyor.aha/empty-score has-empty-score?
-                          :surveyor.aha/survey has-survey?
+                          :surveyor.aha/survey some?
                           :surveyor.aha/empty-survey has-empty-survey?
-                          :surveyor.aha/outcome has-outcome?})
+                          :surveyor.aha/outcome has-outcome?
+                          :surveyor.aha/considered is-being-considered?
+                          :surveyor.aha/deleted some?})
 
 (def feature-predictates-negative {:surveyor.aha/score :surveyor.aha/empty-score
                                    :surveyor.aha/survey :surveyor.aha/empty-survey
+                                   :surveyor.aha/deleted :surveyor.aha/considered
                                    :surveyor.aha/no-outcome :surveyor.aha/outcome})
 
 (defn extract-custom

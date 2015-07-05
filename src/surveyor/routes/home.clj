@@ -43,6 +43,9 @@
                           [:div
                             (check-box "filters" false "survey")
                             (label "filters" "Override survey links")]
+                          [:div
+                            (check-box "filters" false "deleted")
+                            (label "filters" "Include deleted features")]
                           (submit-button "Create Survey"))
                  (form-to ["POST" (str "/aha/" product "/" release)]
                           (hidden-field "action" "retrieve")

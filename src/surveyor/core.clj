@@ -54,7 +54,14 @@
          deploy_url (get survey "deploy_url")]
      deploy_url))
   ([release token filters]
-   (println "haha: " (apply every-pred (map feature-predictates (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters)))))))
+   (let [filterlist (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters))))
+         filterfuncts  (filter some? (map feature-predictates filterlist))
+         filterfunct (apply every-pred filterfuncts)
+         filtered (filter filterfunct (get-features release token))]
+     (do
+       (pprint/pprint filterlist)
+       (pprint/pprint (count filtered))
+       (pprint/pprint filtered)))
    "nil"))
 
 
