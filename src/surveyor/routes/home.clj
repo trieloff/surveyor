@@ -26,11 +26,16 @@
 
 (defn render-aha-product [product token request]
   (println token)
-  (layout/common [:h1 "Select Release"]
+  (layout/common [:h1 "Select Releases"]
                  (link-to "/aha.info" "back")
-                 [:ul
-                  (for [x (aha/get-releases product token)]
-                    [:li x (link-to (str "/aha/" product "/" (:reference_num x)) (:name x)) " – " (-> x :workflow_status :name)])]))
+                 (form-to ["POST" (str "/aha/" product)]
+                          (hidden-field "action" "create")
+                          [:ul
+                           (for [x (aha/get-releases product token)]
+                             [:li x
+                              (check-box "releases" false (:reference_num x))
+                              (link-to (str "/aha/" product "/" (:reference_num x)) (label "releases" (:name x))) " – " (-> x :workflow_status :name)])]
+                          (submit-button "Create multi-release survey"))))
 
 (defn render-aha-release [product release token request]
   (layout/common [:h1 "This is a release"]
