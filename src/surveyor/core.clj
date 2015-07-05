@@ -3,6 +3,7 @@
   (:require [clojure.pprint :as pprint])
   (:require [clj-time.core :as datetime])
   (:require [clj-time.format :as timeformat])
+  (:require [clojure.set :as set])
   (:require [clojure.tools.cli :refer [parse-opts]])
   (:require [cheshire.core :refer :all])
   (:require [surveyor.config :refer :all])
@@ -43,21 +44,26 @@
 ;(-main "-u" "SBX-R-3")
 
 (defn make-survey-for-release
-  [release token]
-  (let [filtered (filter #(has-outcome %) (get-features release token))
-        features (map extract-custom filtered)
-        name (:name (get-product-detail (:product_id (get-release-details release token)) token))
-        survey (post-survey (create-survey release features name) release)
-        api_url (get survey "survey_uri")
-        updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
-        deploy_url (get survey "deploy_url")]
-      deploy_url)
-)
+  ([release token]
+   (make-survey-for-release release token []))
+  ([release token filters]
+   (let [filterlist (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters))))
+         filterfuncts  (filter some? (map feature-predictates filterlist))
+         filterfunct (apply every-pred filterfuncts)
+         filtered (filter filterfunct (get-features release token))
+         features (map extract-custom filtered)
+         name (:name (get-product-detail (:product_id (get-release-details release token)) token))
+         survey (post-survey (create-survey release features name) release)
+         api_url (get survey "survey_uri")
+         updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
+         deploy_url (get survey "deploy_url")]
+     deploy_url)))
+
 
 
 (defn merge-results-for-release
   [release token]
-  (apply concat (let [features (map extract-custom (filter #(has-survey %)(get-features release token)))
+  (apply concat (let [features (map extract-custom (filter #(has-survey? %)(get-features release token)))
         surveys (group-by #(first (clojure.string/split (get % "survey") #"#")) features)]
     (for [[survey featurelist] surveys]
       (let [survey-results (aggregate-results
