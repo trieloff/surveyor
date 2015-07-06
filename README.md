@@ -31,6 +31,10 @@ FIXME: listing of options this app accepts.
 
 ...
 
+### Build Status
+
+[![Circle CI](https://circleci.com/gh/trieloff/suveyor.svg?style=svg&circle-token=fcccfd19fa0612bc8a781777ea28df7ed313615f)](https://circleci.com/gh/trieloff/suveyor)
+
 ### Any Other Sections
 ### That You Think
 ### Might be Useful
