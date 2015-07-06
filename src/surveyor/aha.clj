@@ -40,7 +40,8 @@
 (defn has-outcome?
   [feature]
   (do
-    (println "has-outcome?" (has-custom? feature "outcome"))
+    (pprint/pprint feature)
+    (println (seq? feature) (get feature "reference_num") "has-outcome?" (has-custom? feature "outcome"))
     (has-custom? feature "outcome"))
 )
 

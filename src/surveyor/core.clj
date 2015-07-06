@@ -65,13 +65,19 @@
    (let [filterlist (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters))))
          filterfuncts  (filter some? (map feature-predictates filterlist))
          filterfunct (apply every-pred filterfuncts)
-         filtered (filter filterfunct (get-features releases token))
+         allfeatures (flatten (get-features releases token))
+         filtered (filter filterfunct allfeatures)
          features (map extract-custom filtered)
          name (:name (get-product-detail (:product_id (get-release-details (first releases) token)) token))
          survey (post-survey (create-survey (string/join ", " releases) features name) (str (first releases) "-multi"))
          api_url (get survey "survey_uri")
          updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
-         deploy_url (get survey "deploy_url")]
+         deploy_url (get survey "deploy_url")
+         noop (pprint/pprint filterlist)
+         noop (println "============================")
+         noop (pprint/pprint allfeatures)
+         noop (println "============================")
+         noop (pprint/pprint features)]
      deploy_url))
 
 
