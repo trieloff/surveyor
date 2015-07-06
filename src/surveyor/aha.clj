@@ -63,8 +63,8 @@
 
 (defn has-empty-score? [feature]
   (do
-    (println "has-empty-score?" (= 0 (get feature "score")))
-    (= 0 (get feature "score"))))
+    (println "has-empty-score? " (get feature "score"))
+    (or (nil? (get feature "score")) (= 0 (get feature "score")))))
 
 (defn is-being-considered? [feature]
   (not= "Will not implement" (get (get feature "workflow_status") "name")))
