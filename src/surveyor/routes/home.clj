@@ -34,7 +34,7 @@
                            (for [x (aha/get-releases product token)]
                              [:li x
                               (check-box "releases" false (:reference_num x))
-                              (link-to (str "/aha/" product "/" (:reference_num x)) (label "releases" (:name x))) " – " (-> x :workflow_status :name)])]
+                              (link-to (str "/aha/" product "/" (:reference_num x)) (:name x)) " – " (-> x :workflow_status :name)])]
                           [:div
                            (check-box "filters" false "score")
                            (label "filters" "Override scores")]
@@ -120,7 +120,7 @@
   (POST "/aha/:product" [product release :as request]
         (friend/authorize #{:surveyor.handler/user} (update-aha-releases
                                                      product
-                                                     (filter (comp not nil?) (flatten (vector (get (:params request) "releases"))))
+                                                     (filter (comp not nil?) (flatten (vector (get (:params request) "releases")))) ;;forces a list
                                                      (-> request :session :cemerick.friend/identity :current :access-token)
                                                      (vec (map #(keyword "surveyor.aha" (str %)) (flatten (vector (get (:params request) "filters")))))
                                                      request)))
