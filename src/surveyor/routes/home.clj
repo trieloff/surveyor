@@ -83,6 +83,10 @@
 (defn update-aha-releases [product releases token filters request]
   (layout/common [:h1 "Creating multi-release survey for " (string/join ", " releases)]
                  [:code (str filters)]
+                 ;;[:code (aha/get-features releases token)]
+                 [:div (let [survey (core/make-survey-for-releases releases token filters)]
+                     [:p "Survey has been created: "
+                      (link-to survey survey)])]
                  (link-to (str "/aha/" product) "done.")))
 
 (defn home []

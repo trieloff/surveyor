@@ -5,6 +5,7 @@
   (:require [clj-time.format :as timeformat])
   (:require [clojure.set :as set])
   (:require [clojure.tools.cli :refer [parse-opts]])
+  (:require [clojure.string :as string])
   (:require [cheshire.core :refer :all])
   (:require [surveyor.config :refer :all])
   (:require [surveyor.aha :refer :all])
@@ -59,6 +60,19 @@
          deploy_url (get survey "deploy_url")]
      deploy_url)))
 
+(defn make-survey-for-releases
+  [releases token filters]
+   (let [filterlist (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters))))
+         filterfuncts  (filter some? (map feature-predictates filterlist))
+         filterfunct (apply every-pred filterfuncts)
+         filtered (filter filterfunct (get-features releases token))
+         features (map extract-custom filtered)
+         name (:name (get-product-detail (:product_id (get-release-details (first releases) token)) token))
+         survey (post-survey (create-survey (string/join ", " releases) features name) (str (first releases) "-multi"))
+         api_url (get survey "survey_uri")
+         updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
+         deploy_url (get survey "deploy_url")]
+     deploy_url))
 
 
 (defn merge-results-for-release

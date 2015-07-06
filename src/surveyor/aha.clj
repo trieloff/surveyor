@@ -145,8 +145,10 @@
 (defn get-features
   "Retrieves a lazy seq of features for a given release, starting at the
   specified page. More features are retrieved until the end of the seq"
-  ([release token]
-   (get-features release 1 token))
+  ([releases token]
+   (if (seq? releases)
+     (lazy-cat (map #(get-features % token) releases))
+     (get-features releases 1 token)))
   ([release page token]
    (let [{:keys [status headers body error] :as string}
          @(http/get (str
