@@ -2,6 +2,7 @@
   (:require [compojure.core :refer :all]
             [hiccup.element :refer :all]
             [hiccup.form :refer :all]
+            [clojure.string :as string]
             [cemerick.friend :as friend]
             [surveyor.aha :as aha]
             [surveyor.core :as core]
@@ -26,11 +27,24 @@
 
 (defn render-aha-product [product token request]
   (println token)
-  (layout/common [:h1 "Select Release"]
+  (layout/common [:h1 "Select Releases"]
                  (link-to "/aha.info" "back")
-                 [:ul
-                  (for [x (aha/get-releases product token)]
-                    [:li x (link-to (str "/aha/" product "/" (:reference_num x)) (:name x)) " – " (-> x :workflow_status :name)])]))
+                 (form-to ["POST" (str "/aha/" product)]
+                          [:ul
+                           (for [x (aha/get-releases product token)]
+                             [:li x
+                              (check-box "releases" false (:reference_num x))
+                              (link-to (str "/aha/" product "/" (:reference_num x)) (:name x)) " – " (-> x :workflow_status :name)])]
+                          [:div
+                           (check-box "filters" false "score")
+                           (label "filters" "Override scores")]
+                          [:div
+                           (check-box "filters" false "survey")
+                           (label "filters" "Override survey links")]
+                          [:div
+                           (check-box "filters" false "deleted")
+                           (label "filters" "Include deleted features")]
+                          (submit-button "Create multi-release survey"))))
 
 (defn render-aha-release [product release token request]
   (layout/common [:h1 "This is a release"]
@@ -66,6 +80,15 @@
                      ))
                  (link-to (str "/aha/" product "/" release) "done.")))
 
+(defn update-aha-releases [product releases token filters request]
+  (layout/common [:h1 "Creating multi-release survey for " (string/join ", " releases)]
+                 [:code (str filters)]
+                 ;;[:code (aha/get-features releases token)]
+                 [:div (let [survey (core/make-survey-for-releases releases token filters)]
+                     [:p "Survey has been created: "
+                      (link-to survey survey)])]
+                 (link-to (str "/aha/" product) "done.")))
+
 (defn home []
   (println "home")
   (layout/common [:h1 "Hello World!"]
@@ -98,6 +121,13 @@
                                                      request)))
   (GET "/aha/:product" [product :as request]
        (friend/authorize #{:surveyor.handler/user} (render-aha-product product (-> request :session :cemerick.friend/identity :current :access-token) request)))
+  (POST "/aha/:product" [product release :as request]
+        (friend/authorize #{:surveyor.handler/user} (update-aha-releases
+                                                     product
+                                                     (filter (comp not nil?) (flatten (vector (get (:params request) "releases")))) ;;forces a list
+                                                     (-> request :session :cemerick.friend/identity :current :access-token)
+                                                     (vec (map #(keyword "surveyor.aha" (str %)) (flatten (vector (get (:params request) "filters")))))
+                                                     request)))
   (GET "/aha.info" request
        (friend/authorize #{:surveyor.handler/user} (render-aha-info request)))
   (GET "/status" request
