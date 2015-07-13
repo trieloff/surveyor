@@ -6,6 +6,7 @@
             [surveyor.config :refer [config]]
             [ring.util.response :refer [redirect]]
             [clj-oauth2.client :as oauth2]
+            [surveyor.ring :as oauth2-ring]
             [surveyor.views.layout :as layout]))
 
 ;; :access-token-uri "https://fluidsurveys.com/accounts/oauth/token/"
@@ -15,25 +16,28 @@
 (def fluidsurveys-oauth2
   {:authorization-uri "https://fluidsurveys.com/accounts/developer/authorize/"
    :access-token-uri "https://fluidsurveys.com/accounts/oauth/token/"
-   :redirect-uri "https://localhost/fluidsurveys.callback"
+   :redirect-uri "https://localhost:443/fluidsurveys.callback"
    :client-id (config "fluidsurveys.clientid")
    :client-secret (config "fluidsurveys.clientsecret")
    :access-query-param :access_token
-   :grant-type "authorization_code"})
-
-(oauth2/make-auth-request fluidsurveys-oauth2 "some-csrf-protection-string")
-(defn login []
-  (let [auth-req (oauth2/make-auth-request fluidsurveys-oauth2 "some-csrf-protection-string")]
-    (redirect (:uri auth-req))))
+   :grant-type "authorization_code"
+   :force-https true
+   :get-state oauth2-ring/get-state-from-session
+   :put-state oauth2-ring/put-state-in-session
+   :get-target oauth2-ring/get-target-from-session
+   :put-target oauth2-ring/put-target-in-session
+   :get-oauth2-data oauth2-ring/get-oauth2-data-from-session
+   :put-oauth2-data oauth2-ring/put-oauth2-data-in-session
+   :exclude #"^/$"
+   :trace-messages true})
 
 (defn callback [request params]
   (str "<h1>Hello Callback</h1><code>"
        (str params)
        "<code>"
-       "<p>"
-       (oauth2/get-access-token fluidsurveys-oauth2 params)
-       "</p>"))
+       "<code>"
+       (str request)
+       "</code>"))
 
 (defroutes fluidsurveys-routes
-  (GET "/fluidsurveys.login" [] (login))
-  (GET "/fluidsurveys.callback" {:keys [params] :as request} (callback request params)))
+  (GET "/fluidsurveys.login" {:keys [params] :as request} (callback request params)))

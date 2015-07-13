@@ -9,7 +9,8 @@
             [surveyor.workflow :as oauth2]
             [friend-oauth2.util     :refer [format-config-uri get-access-token-from-params extract-access-token]]
             [surveyor.config :refer [config]]
-            [surveyor.routes.fluidsurveys :refer [fluidsurveys-routes]]
+            [surveyor.ring :refer [wrap-oauth2]]
+            [surveyor.routes.fluidsurveys :refer [fluidsurveys-routes fluidsurveys-oauth2]]
             [surveyor.routes.home :refer [home-routes]]))
 
 (defn init []
@@ -70,13 +71,21 @@
                                     })
                                   ]})
 
+(defn wrap-proxy [handler override]
+  (fn [request]
+    (if (get (:headers request) "x-forwarded-host")
+      (handler (merge request override))
+      (handler request))))
+
 (def app
   (-> (routes home-routes fluidsurveys-routes app-routes)
+      (wrap-oauth2 fluidsurveys-oauth2)
       (friend/authenticate friend-config)
       (wrap-base-url)
       (ring.middleware.session/wrap-session)
+      (ring.middleware.keyword-params/wrap-keyword-params)
       (ring.middleware.params/wrap-params)
-      (ring.middleware.keyword-params/wrap-keyword-params)))
+      (wrap-proxy {:server-port "443" :scheme :https})))
 
 
 ;; {:allow-anon? true
