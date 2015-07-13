@@ -14,7 +14,7 @@
         session (assoc (:session request) :count (inc count))]
     (-> (ring.util.response/response
            (str "<p>We've hit the session page " (:count session)
-                " times.</p><p>The current session: " session "</p><p><a href='/'>back</a>"))
+                " times.</p><code>The current session: " session "</code><p><a href='/'>back</a>"))
          (assoc :session session))))
 
 (defn render-aha-info [request]
@@ -94,7 +94,7 @@
   (layout/common [:h1 "Hello World!"]
                  [:ul
                   [:li (link-to "/aha.info" "Login with aha.io")]
-                  [:li (link-to "/aha.nope" "Logout of aha.io")]
+                  [:li (link-to "/fluidsurveys.info" "Login with Fluidsurveys")]
                   [:li (link-to "/status" "Get status")]]))
 
 (defn unauthorized
@@ -130,5 +130,7 @@
                                                      request)))
   (GET "/aha.info" request
        (friend/authorize #{:surveyor.handler/user} (render-aha-info request)))
+  (GET "/fluidsurveys.info" request
+       (friend/authorize #{:surveyor.handler/fluidsurveys} (render-aha-info request)))
   (GET "/status" request
        (render-status-page request)))

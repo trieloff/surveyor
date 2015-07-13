@@ -22,24 +22,43 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
-(def client-config
+(def fluidsurveys-client-config
+  {:client-id (config "fluidsurveys.clientid")
+   :client-secret (config "fluidsurveys.clientsecret")
+   ;; TODO get friend-oauth2 to support :context, :path-info
+   :callback {:domain (str "https://" (config "aha.clientdomain")) :path "/fluidsurveys.callback"}})
+
+(def aha-client-config
   {:client-id (config "aha.clientid")
    :client-secret (config "aha.clientsecret")
    ;; TODO get friend-oauth2 to support :context, :path-info
    :callback {:domain (str "https://" (config "aha.clientdomain")) :path "/aha.callback"}})
 
-(def uri-config
+(def aha-uri-config
   {:authentication-uri {:url (str "https://" (config "aha.host") ".aha.io" "/oauth/authorize")
-                        :query {:client_id (:client-id client-config)
+                        :query {:client_id (:client-id aha-client-config)
                                 :response_type "code"
-                                :redirect_uri (format-config-uri client-config)
+                                :redirect_uri (format-config-uri aha-client-config)
                                 :scope ""}}
 
    :access-token-uri {:url (str "https://" (config "aha.host") ".aha.io" "/oauth/token")
-                      :query {:client_id (:client-id client-config)
-                              :client_secret (:client-secret client-config)
+                      :query {:client_id (:client-id aha-client-config)
+                              :client_secret (:client-secret aha-client-config)
                               :grant_type "authorization_code"
-                              :redirect_uri (format-config-uri client-config)}}})
+                              :redirect_uri (format-config-uri aha-client-config)}}})
+
+(def fluidsurveys-uri-config
+  {:authentication-uri {:url "https://fluidsurveys.com/accounts/developer/authorize/"
+                        :query {:client_id (:client-id fluidsurveys-client-config)
+                                :response_type "code"
+                                :redirect_uri (format-config-uri fluidsurveys-client-config)
+                                :scope ""}}
+
+   :access-token-uri {:url "https://fluidsurveys.com/accounts/oauth/token/"
+                      :query {:client_id (:client-id fluidsurveys-client-config)
+                              :client_secret (:client-secret fluidsurveys-client-config)
+                              :grant_type "authorization_code"
+                              :redirect_uri (format-config-uri fluidsurveys-client-config)}}})
 
 (defn credential-fn
   "Upon successful authentication with the third party, Friend calls
@@ -58,20 +77,35 @@
     {:identity token
      :roles #{:surveyor.handler/user}})
 
-(def friend-config {:allow-anon? true
+(defn fluidsurveys-credential-fn [token]
+  (println "Token from FLUIDSURVEYS: " token)
+  {:fluidsurveys-identity token
+   :roles #{:surveyor.handler/fluidsurveys }})
+
+(def aha-friend-config {:allow-anon? true
                     :unauthorized-handler surveyor.routes.home/unauthorized
                     :workflows   [(oauth2/workflow
-                                   {:client-config client-config
-                                    :uri-config uri-config
+                                   {:client-config aha-client-config
+                                    :uri-config aha-uri-config
                                     :access-token-parsefn extract-access-token
 ;;                                    :config-auth config-auth
                                     :credential-fn credential-fn
-                                    })
-                                  ]})
+                                    })]})
+
+(def fluidsurveys-friend-config {:allow-anon? true
+                    :unauthorized-handler surveyor.routes.home/unauthorized
+                    :workflows   [(oauth2/workflow
+                                   {:client-config fluidsurveys-client-config
+                                    :uri-config fluidsurveys-uri-config
+                                    :access-token-parsefn extract-access-token
+;;                                    :config-auth config-auth
+                                    :credential-fn fluidsurveys-credential-fn
+                                    })]})
 
 (def app
   (-> (routes home-routes app-routes)
-      (friend/authenticate friend-config)
+      (friend/authenticate aha-friend-config)
+      (friend/authenticate fluidsurveys-friend-config)
       (wrap-base-url)
       (ring.middleware.session/wrap-session)
       (ring.middleware.params/wrap-params)
