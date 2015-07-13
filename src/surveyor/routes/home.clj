@@ -94,7 +94,7 @@
   (layout/common [:h1 "Hello World!"]
                  [:ul
                   [:li (link-to "/aha.info" "Login with aha.io")]
-                  [:li (link-to "/aha.nope" "Logout of aha.io")]
+                  [:li (link-to "/fluidsurveys.login" "Login with Fluidsurveys")]
                   [:li (link-to "/status" "Get status")]]))
 
 (defn unauthorized

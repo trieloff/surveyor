@@ -9,6 +9,7 @@
             [surveyor.workflow :as oauth2]
             [friend-oauth2.util     :refer [format-config-uri get-access-token-from-params extract-access-token]]
             [surveyor.config :refer [config]]
+            [surveyor.routes.fluidsurveys :refer [fluidsurveys-routes]]
             [surveyor.routes.home :refer [home-routes]]))
 
 (defn init []
@@ -70,7 +71,7 @@
                                   ]})
 
 (def app
-  (-> (routes home-routes app-routes)
+  (-> (routes home-routes fluidsurveys-routes app-routes)
       (friend/authenticate friend-config)
       (wrap-base-url)
       (ring.middleware.session/wrap-session)
