@@ -2,6 +2,7 @@
   (:require
    [friend-oauth2.util :as util]
    [cemerick.friend :as friend]
+   [clojure.pprint :as pprint]
    [ring.middleware.params :as ring-params]
    [clj-http.client :as client]
    [ring.util.request :as request]))
@@ -45,18 +46,21 @@
   (fn [request]
     (println "========>>>" (:uri request))
     (if (is-oauth2-callback? config request)
-      (println "This is a callback." request)
+      (do
+        (println "This is a callback.")
+        (pprint/pprint request))
       (println ""))
     (when (is-oauth2-callback? config request)
       ;; Extracts code from request if we are getting here via OAuth2 callback.
       ;; http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1.2
       (let [myparams (:params (ring-params/params-request request))
-            state (get myparams "state")
-            code (get myparams "code")
-            error (get myparams "error")
+            nope (pprint/pprint (ring-params/params-request request))
+            state (:state myparams)
+            code (:code myparams)
+            error (:error myparams)
             session-state        (util/extract-anti-forgery-token request)]
         (println "myparams " myparams)
-        (println "state, code, error, session-state" state code error session-state)
+        (println "state: " state " code: " code " error: " error " session-state: " session-state)
         (if (or false (and (not (nil? code))
                  (= state session-state)))
           (do (println "One")
