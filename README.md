@@ -23,6 +23,7 @@ Using surveyor relies on four tools:
 - [FluidSurveys](https://fluidsurveys.com) – is the survey tool that will be used to create surveys and collect responses (at least the Ultra account is required, the free usage tier does not include access to the API)
 - [Leningen](http://leiningen.org) – running Surveyor requires building it from source code, and this process is using Leiningen as the build tool (Leinigen is free software)
 - (optional) [Heroku](https://www.heroku.com) – Surveyor has been developed to be deployed on Heroku, but can also be run on other PaaS platforms, or run on a self-hosted server (the free usage tier is just fine)
+- (optional) [Foreman](http://theforeman.org) – to simulate a local Heroku environment
 
 
 ## Building and Installing
@@ -64,6 +65,8 @@ your aha.io product settings.
 14. Enter *key*: survey
 15. Select placement: *below record*
 16. Click *Save*
+
+### Aha Custom Scores
 
 ### Aha Application
 
@@ -108,35 +111,95 @@ deployment on Heroku, where you don't want to store security credentials in plai
 
 All of these settings are mandatory and required to make Surveyor work.
 
+## Running
+
+There are multiple ways of running Surveyor
+
+### Locally
+
+    $ java -cp target/uberjar/surveyor-standalone.jar clojure.main -m surveyor.repl 3000
+
+### Using Leiningen
+
+    $ lein ring server
+
+### Using Foreman
+
+    $ foreman start
+
+
+### On Heroku
+
+Follow the [Heroku Clojure Guide](https://devcenter.heroku.com/articles/getting-started-with-clojure#introduction) to install
+Surveyor on Heroku. Do not forget to set the configuration options as environment variables.
+
 ## Usage
 
-FIXME: explanation
+### Plan your Roadmap
 
-    $ java -jar surveyor-0.1.0-standalone.jar [args]
+Use Aha.io to create features and group them into releases. For each feature that should be considered for the survey, define the *Outcome* in the feature metadata.
+
+### 1. Create the Survey
+
+1. Open Surveyor
+2. Click *Log in with FluidSurveys and Aha.io*
+3. Surveyor will redirect you to a FluidSurveys authentiaction screen. *Accept* the request
+4. Surveyor will then redirect you to an equivalent Aha.io authentiaction screen. *Accept* this request as well
+5. Select the product you want to generate a survey for. All products will show up, but only products with the appropriate settings (custom fields and scores) will work with Surveyor
+6. Select the releases you want to include in your survey. You can either check the checkbox for multiple releases or click on a specific release
+7. (Optional) Select the additional options, if needed
+8. Click *create release survey* or *create multi-release survey*
+9. Copy the Survey URL
+
+### 2. Distribute the Survey
+
+Distribute the survey among your users. You can use in-application messaging or e-mail for this.
+
+### 3. Wait for Responses
+
+Patiently
+
+### 4. Gather responses
+
+1. Open Surveyor
+2. Click *Log in with FluidSurveys and Aha.io*
+3. Authenticate, if needed
+4. Select the product you want to gather feedback for
+5. Select the release you want to gather feedback for
+6. Click *retrieve results*
+
+Your survey results will now be merged back into Aha.io
+
+### Review the Roadmap
+
+In your roadmap, you will now see following things:
+
+- Some features have the tag *must-be*
+- Some features have the tag *one-dimensional*
+- Some features have the tag *attractive*
+- All features have a new Aha Score
+- Clicking on the Aha score, will show scores for *Opportunity*, *Importance*, and *Satisfaction*
+
+Use this information to re-plan your roadmap.
 
 ## Options
 
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
+- *Override scores* – by default, Surveyor will not include features in the survey that already have a score. Check this option to include features that have (manually set) scores
+- *Override survey links* – by default, Surveyor will not include features in the survey that have been covered in other surveys before. Check this option to include all features. **Warning** this will break the link to the older survey, so that updates to the older survey's results will not be reflected on the affected features.
+- *Inlcude deleted features* –  by default, Surveyor will not include features that are in the *will not implement* state. Check this option to override the behavior.
 
 ### Bugs
 
-...
+plenty.
 
 ### Build Status
 
 [![Circle CI](https://circleci.com/gh/trieloff/suveyor.svg?style=svg&circle-token=fcccfd19fa0612bc8a781777ea28df7ed313615f)](https://circleci.com/gh/trieloff/suveyor)
 
-### Any Other Sections
-### That You Think
-### Might be Useful
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 Lars Trieloff
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
