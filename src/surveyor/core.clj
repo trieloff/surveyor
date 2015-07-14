@@ -45,33 +45,33 @@
 ;(-main "-u" "SBX-R-3")
 
 (defn make-survey-for-release
-  ([release token]
-   (make-survey-for-release release token []))
-  ([release token filters]
+  ([release ahatoken]
+   (make-survey-for-release release ahatoken []))
+  ([release ahatoken filters]
    (let [filterlist (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters))))
          filterfuncts  (filter some? (map feature-predictates filterlist))
          filterfunct (apply every-pred filterfuncts)
-         filtered (filter filterfunct (get-features release token))
+         filtered (filter filterfunct (get-features release ahatoken))
          features (map extract-custom filtered)
-         name (:name (get-product-detail (:product_id (get-release-details release token)) token))
+         name (:name (get-product-detail (:product_id (get-release-details release ahatoken)) ahatoken))
          survey (post-survey (create-survey release features name) release)
          api_url (get survey "survey_uri")
-         updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
+         updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) ahatoken))
          deploy_url (get survey "deploy_url")]
      deploy_url)))
 
 (defn make-survey-for-releases
-  [releases token filters]
+  [releases ahatoken filters]
    (let [filterlist (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters))))
          filterfuncts  (filter some? (map feature-predictates filterlist))
          filterfunct (apply every-pred filterfuncts)
-         allfeatures (flatten (get-features releases token))
+         allfeatures (flatten (get-features releases ahatoken))
          filtered (filter filterfunct allfeatures)
          features (map extract-custom filtered)
-         name (:name (get-product-detail (:product_id (get-release-details (first releases) token)) token))
+         name (:name (get-product-detail (:product_id (get-release-details (first releases) ahatoken)) ahatoken))
          survey (post-survey (create-survey (string/join ", " releases) features name) (str (first releases) "-multi"))
          api_url (get survey "survey_uri")
-         updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) token))
+         updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) ahatoken))
          deploy_url (get survey "deploy_url")
          noop (pprint/pprint filterlist)
          noop (println "============================")
@@ -82,8 +82,8 @@
 
 
 (defn merge-results-for-release
-  [release token]
-  (apply concat (let [features (map extract-custom (filter #(has-survey? %)(get-features release token)))
+  [release ahatoken]
+  (apply concat (let [features (map extract-custom (filter #(has-survey? %)(get-features release ahatoken)))
         surveys (group-by #(first (clojure.string/split (get % "survey") #"#")) features)]
     (for [[survey featurelist] surveys]
       (let [survey-results (aggregate-results
@@ -103,10 +103,10 @@
 )
 
 (defn save-results-for-release
-  [merged-results token]
+  [merged-results ahatoken]
   (doseq [result merged-results]
-    (update-tags (get result "feature") (get result "results") token)
-    (update-score (get result "feature") (get result "results") token)
+    (update-tags (get result "feature") (get result "results") ahatoken)
+    (update-score (get result "feature") (get result "results") ahatoken)
   )
 )
 
@@ -124,14 +124,14 @@
   "I don't do a whole lot ... yet."
   [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
-        token (config "aha.auth")]
+        ahatoken (config "aha.auth")]
     ;; Handle help and error conditions
     (cond
       (:help options) (exit 0 (usage summary))
       errors (exit 1 (error-msg errors)))
     ;; Execute program with options
-    (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options) token))))
-    (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options) token) token))))
+    (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options) ahatoken))))
+    (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options) ahatoken) ahatoken))))
     ))
 
 ;(-main "-s" "SBX-R-1")
