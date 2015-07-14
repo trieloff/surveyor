@@ -260,9 +260,9 @@
 )
 
 (defn post-survey
-  ([json]
-   (post-survey json "Feature Survey"))
-  ([json title]
+  ([json fstoken]
+   (post-survey json "Feature Survey" fstoken))
+  ([json title fstoken]
   (let [{:keys [status headers body error] :as string}
         @(http/post "https://fluidsurveys.com/api/v3/surveys/" (assoc fluidsurveys-options :form-params {:name title}))]
     (let [survey (parse-string body)]
@@ -271,7 +271,7 @@
       ))))
 
 (defn get-results
-  [survey]
+  [survey fstoken]
   (let [{:keys [status headers body error] :as string}
     @(http/get (get survey "responses_uri") fluidsurveys-options)]
     (let [response (parse-string body)

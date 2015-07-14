@@ -54,7 +54,7 @@
          filtered (filter filterfunct (get-features release ahatoken))
          features (map extract-custom filtered)
          name (:name (get-product-detail (:product_id (get-release-details release ahatoken)) ahatoken))
-         survey (post-survey (create-survey release features name) release)
+         survey (post-survey (create-survey release features name) release fstoken)
          api_url (get survey "survey_uri")
          updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) ahatoken))
          deploy_url (get survey "deploy_url")]
@@ -69,7 +69,7 @@
          filtered (filter filterfunct allfeatures)
          features (map extract-custom filtered)
          name (:name (get-product-detail (:product_id (get-release-details (first releases) ahatoken)) ahatoken))
-         survey (post-survey (create-survey (string/join ", " releases) features name) (str (first releases) "-multi"))
+         survey (post-survey (create-survey (string/join ", " releases) features name) (str (first releases) "-multi") fstoken)
          api_url (get survey "survey_uri")
          updated_urls (doall (update-survey-urls (map extract-custom filtered) (str api_url) ahatoken))
          deploy_url (get survey "deploy_url")
@@ -93,7 +93,7 @@
                          kano-score (map
                                      ulwick-opportunity
                                      (strip-results
-                                      (get-results {"responses_uri" (str survey "responses/")})))))))]
+                                      (get-results {"responses_uri" (str survey "responses/")} fstoken)))))))]
         (map #(hash-map
                "feature" (get % "reference_num")
                "survey" (first (clojure.string/split (get % "survey") #"#"))
