@@ -68,6 +68,31 @@ your aha.io product settings.
 
 ### Aha Custom Scores
 
+Surveyor uses Aha's score system to track Importance, Satisfaction and Opportunity. Following steps are required once to set up the scoring system:
+
+1. Log in to aha.io
+2. Click *Settings*
+3. Click *Configure Scorecards*
+4. Click *+* next to the label *Configure Scorecards*
+5. Enter Ulwick Opportunity Score as the name
+6. Click *Add Metric*
+7. Enter `Opportunity` as *metric name* – minimum 0, maxium 20
+8. Click *Add Metric*
+9. Enter `Importance` as *metric name* – minimum 0, maxium 10
+10. Click *Add Metric*
+11. Enter `Satisfaction` as *metric name* – minimum 0, maxium 10
+12. Select equation type *advanced equation*
+13. Type following equation: `Opportunity` – the other two metrics are only informational, Surveor will handle the calculation.
+
+The new scorecard needs to be applied to all products that Surveyor should manage. Stay in aha.io and follow these steps for each product or product line:
+
+1. Click *Product* or *Product Line* in the left sidebar
+2. Select *Configure*
+3. For option *scorecard for features* select *Ulwick Opportunity Score*
+4. Click *Update*
+
+Repeat this for all products.
+
 ### Aha Application
 
 In order to use Aha's API, you need to register an application with Aha.
