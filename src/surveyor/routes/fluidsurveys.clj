@@ -28,7 +28,7 @@
    :put-target oauth2-ring/put-target-in-session
    :get-oauth2-data oauth2-ring/get-oauth2-data-from-session
    :put-oauth2-data oauth2-ring/put-oauth2-data-in-session
-   :exclude #"^/$"
+   :exclude #"^(/|/status.*|/css/.*)$"
    :trace-messages true})
 
 (defn callback [request params]

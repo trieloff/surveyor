@@ -93,8 +93,8 @@
   (println "home")
   (layout/common [:h1 "Hello World!"]
                  [:ul
-                  [:li (link-to "/aha.info" "Login with aha.io")]
-                  [:li (link-to "/fluidsurveys.login" "Login with Fluidsurveys")]
+                  [:li (link-to "/aha.info" "Login with Fluidsurveys and Aha.io")]
+                  [:li (link-to "/https://github.com/trieloff/suveyor" "What is this?")]
                   [:li (link-to "/status" "Get status")]]))
 
 (defn unauthorized
