@@ -1,4 +1,4 @@
-(defproject surveyor "0.1.0"
+(defproject surveyor "0.2.0-SNAPSHOT"
   :description "Create surveys from feature sets"
   :url "https://github.com/trieloff/suveyor"
   :min-lein-version "2.5.0"
