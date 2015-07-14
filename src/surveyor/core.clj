@@ -45,9 +45,9 @@
 ;(-main "-u" "SBX-R-3")
 
 (defn make-survey-for-release
-  ([release ahatoken]
-   (make-survey-for-release release ahatoken []))
-  ([release ahatoken filters]
+  ([release ahatoken fstoken]
+   (make-survey-for-release release ahatoken fstoken []))
+  ([release ahatoken fstoken filters]
    (let [filterlist (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters))))
          filterfuncts  (filter some? (map feature-predictates filterlist))
          filterfunct (apply every-pred filterfuncts)
@@ -61,7 +61,7 @@
      deploy_url)))
 
 (defn make-survey-for-releases
-  [releases ahatoken filters]
+  [releases ahatoken fstoken filters]
    (let [filterlist (apply conj filters (map feature-predictates-negative (set/difference (set (keys feature-predictates-negative)) (set filters))))
          filterfuncts  (filter some? (map feature-predictates filterlist))
          filterfunct (apply every-pred filterfuncts)
@@ -82,7 +82,7 @@
 
 
 (defn merge-results-for-release
-  [release ahatoken]
+  [release ahatoken fstoken]
   (apply concat (let [features (map extract-custom (filter #(has-survey? %)(get-features release ahatoken)))
         surveys (group-by #(first (clojure.string/split (get % "survey") #"#")) features)]
     (for [[survey featurelist] surveys]
@@ -103,7 +103,7 @@
 )
 
 (defn save-results-for-release
-  [merged-results ahatoken]
+  [merged-results ahatoken fstoken]
   (doseq [result merged-results]
     (update-tags (get result "feature") (get result "results") ahatoken)
     (update-score (get result "feature") (get result "results") ahatoken)
@@ -130,8 +130,8 @@
       (:help options) (exit 0 (usage summary))
       errors (exit 1 (error-msg errors)))
     ;; Execute program with options
-    (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options) ahatoken))))
-    (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options) ahatoken) ahatoken))))
+    (if (:survey options) ( println (str "Creating survey for " (:survey options) "\nPlease distribute the survey URL " (make-survey-for-release (:survey options) ahatoken "fstoken-dummy"))))
+    (if (:update options) ( pprint/pprint (str "Updating survey for " (:update options) " " (save-results-for-release (merge-results-for-release (:update options) ahatoken "fstoken-dummy") ahatoken "fstoken-dummy"))))
     ))
 
 ;(-main "-s" "SBX-R-1")

@@ -71,10 +71,10 @@
                  ;;                  [:code (str request)]
                  [:p action]
                  (if (= action "create")
-                   (let [survey (core/make-survey-for-release release ahatoken filters)]
+                   (let [survey (core/make-survey-for-release release ahatoken fstoken filters)]
                      [:p "Survey has been created: "
                       (link-to survey survey)])
-                   (let [result (core/save-results-for-release (core/merge-results-for-release release ahatoken) ahatoken)]
+                   (let [result (core/save-results-for-release (core/merge-results-for-release release ahatoken fstoken) ahatoken fstoken)]
                      [:p "Stuff has been updated"]
                      [:code result]
                      ))
@@ -84,7 +84,7 @@
   (layout/common [:h1 "Creating multi-release survey for " (string/join ", " releases)]
                  ;;[:code (str "filters:\n" filters "\nreleases:\n" releases "\n request:\n" request)]
                  ;;[:code (aha/get-features releases token)]
-                 [:div (let [survey (core/make-survey-for-releases releases ahatoken filters)]
+                 [:div (let [survey (core/make-survey-for-releases releases ahatoken fstoken filters)]
                      [:p "Survey has been created: "
                       (link-to survey survey)])]
                  (link-to (str "/aha/" product) "done.")))
