@@ -14,7 +14,7 @@
         session (assoc (:session request) :count (inc count))]
     (-> (ring.util.response/response
            (str "<p>We've hit the session page " (:count session)
-                " times.</p><p>The current session: " session "</p><p><a href='/'>back</a>"))
+                " times.</p><p>The current session:</p> <code>" session "</code><p><a href='/'>back</a>"))
          (assoc :session session))))
 
 (defn render-aha-info [request]
