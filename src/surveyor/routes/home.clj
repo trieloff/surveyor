@@ -21,6 +21,7 @@
   (println "aha")
   (let [token (-> request :session :cemerick.friend/identity :current :access-token)]
     (layout/common [:h1 "Select Product"]
+                   [:code "Haha: " (-> request :session :oauth2 :access-token)]
                    [:ul
                     (for [x (aha/get-products token)]
                       [:li (link-to (str "/aha/" (:reference_prefix x)) (:name x))])])))
@@ -65,26 +66,26 @@
                           (hidden-field "action" "retrieve")
                           (submit-button "Retrieve Results"))))
 
-(defn update-aha-release [product release token action filters request]
+(defn update-aha-release [product release ahatoken action filters request]
   (layout/common [:h1 "Updating a release"]
                  ;;                  [:code (str request)]
                  [:p action]
 ;;                  [:code (str filters)]
                  (if (= action "create")
-                   (let [survey (core/make-survey-for-release release token filters)]
+                   (let [survey (core/make-survey-for-release release ahatoken filters)]
                      [:p "Survey has been created: "
                       (link-to survey survey)])
-                   (let [result (core/save-results-for-release (core/merge-results-for-release release token) token)]
+                   (let [result (core/save-results-for-release (core/merge-results-for-release release ahatoken) ahatoken)]
                      [:p "Stuff has been updated"]
                      [:code result]
                      ))
                  (link-to (str "/aha/" product "/" release) "done.")))
 
-(defn update-aha-releases [product releases token filters request]
+(defn update-aha-releases [product releases ahatoken filters request]
   (layout/common [:h1 "Creating multi-release survey for " (string/join ", " releases)]
                  [:code (str filters)]
                  ;;[:code (aha/get-features releases token)]
-                 [:div (let [survey (core/make-survey-for-releases releases token filters)]
+                 [:div (let [survey (core/make-survey-for-releases releases ahatoken filters)]
                      [:p "Survey has been created: "
                       (link-to survey survey)])]
                  (link-to (str "/aha/" product) "done.")))
