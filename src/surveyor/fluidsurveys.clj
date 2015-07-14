@@ -23,9 +23,11 @@
  [4 0] "reverse"      [4 1] "reverse"     [4 2] "reverse"     [4 3] "reverse"     [4 4] "questionable"
 })
 
-; bad, bad coder!
 (def fluidsurveys-options {:timeout 2000             ; ms
               :headers {"Authorization" (str "Basic " (config "fluidsurveys.auth")) "Content-Type" "application/json"}})
+
+(defn fs-token-options [token]
+  (assoc-in fluidsurveys-options [:headers "Authorization"] (str "Bearer " token)))
 
 (defn create-labels
   "Generates a sequence of labels for range responses."
@@ -264,16 +266,16 @@
    (post-survey json "Feature Survey" fstoken))
   ([json title fstoken]
   (let [{:keys [status headers body error] :as string}
-        @(http/post "https://fluidsurveys.com/api/v3/surveys/" (assoc fluidsurveys-options :form-params {:name title}))]
+        @(http/post "https://fluidsurveys.com/api/v3/surveys/" (assoc (fs-token-options fstoken) :form-params {:name title}))]
     (let [survey (parse-string body)]
       (let [{:keys [status headers body error] :as string}
-            @(http/put (get survey "survey_structure_uri") (assoc fluidsurveys-options :body json))] survey)
+            @(http/put (get survey "survey_structure_uri") (assoc (fs-token-options fstoken) :body json))] survey)
       ))))
 
 (defn get-results
   [survey fstoken]
   (let [{:keys [status headers body error] :as string}
-    @(http/get (get survey "responses_uri") fluidsurveys-options)]
+    @(http/get (get survey "responses_uri") (fs-token-options fstoken))]
     (let [response (parse-string body)
           results (get response "results")]
       (if-not (= nil (get response "next"))
