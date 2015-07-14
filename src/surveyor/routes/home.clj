@@ -82,7 +82,7 @@
 
 (defn update-aha-releases [product releases ahatoken fstoken filters request]
   (layout/common [:h1 "Creating multi-release survey for " (string/join ", " releases)]
-                 [:code (str filters)]
+                 ;;[:code (str "filters:\n" filters "\nreleases:\n" releases "\n request:\n" request)]
                  ;;[:code (aha/get-features releases token)]
                  [:div (let [survey (core/make-survey-for-releases releases ahatoken filters)]
                      [:p "Survey has been created: "
@@ -117,18 +117,18 @@
                                                      release
                                                      (-> request :session :cemerick.friend/identity :current :access-token)
                                                      (-> request :session :oauth2 :access-token) ;;fluidsurveys token
-                                                     (get (:params request) "action")
-                                                     (vec (map #(keyword "surveyor.aha" (str %)) (flatten (vector (get (:params request) "filters")))))
+                                                     (-> request :params :action)
+                                                     (vec (map #(keyword "surveyor.aha" (str %)) (flatten (vector (-> request :params :filters)))))
                                                      request)))
   (GET "/aha/:product" [product :as request]
        (friend/authorize #{:surveyor.handler/user} (render-aha-product product (-> request :session :cemerick.friend/identity :current :access-token) request)))
   (POST "/aha/:product" [product release :as request]
         (friend/authorize #{:surveyor.handler/user} (update-aha-releases
                                                      product
-                                                     (filter (comp not nil?) (flatten (vector (get (:params request) "releases")))) ;;forces a list
+                                                     (filter (comp not nil?) (flatten (vector (-> request :params :releases)))) ;;forces a list
                                                      (-> request :session :cemerick.friend/identity :current :access-token) ;;aha token
                                                      (-> request :session :oauth2 :access-token) ;;fluidsurveys token
-                                                     (vec (map #(keyword "surveyor.aha" (str %)) (flatten (vector (get (:params request) "filters")))))
+                                                     (vec (map #(keyword "surveyor.aha" (str %)) (flatten (vector (-> request :params :filters)))))
                                                      request)))
   (GET "/aha.info" request
        (friend/authorize #{:surveyor.handler/user} (render-aha-info request)))
