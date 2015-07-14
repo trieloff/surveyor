@@ -1,9 +1,9 @@
-(defproject surveyor "0.1.0-SNAPSHOT"
+(defproject surveyor "0.1.0"
   :description "Create surveys from feature sets"
   :url "https://github.com/trieloff/suveyor"
   :min-lein-version "2.5.0"
-  :license {:name "Apache License 2.0"
-            :url "http://www.apache.org/licenses/LICENSE-2.0.html"}
+  :license {:name "Eclipse Public License"
+            :url "http://opensource.org/licenses/eclipse-1.0.php"}
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [http-kit "2.1.16"]
                  [clj-time "0.6.0"]
