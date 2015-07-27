@@ -73,7 +73,8 @@
 
 (defn wrap-proxy [handler override]
   (fn [request]
-    (if (get (:headers request) "x-forwarded-host")
+    (if (or (get (:headers request) "x-forwarded-host")
+            (get (:headers request) "X-Forwarded-For"))
       (handler (merge request override))
       (handler request))))
 
