@@ -75,7 +75,7 @@
   (fn [request]
     (println "My headers are: " (:headers request))
     (if (or (get (:headers request) "x-forwarded-host")
-            (get (:headers request) "X-Forwarded-For"))
+            (get (:headers request) "x-forwarded-for"))
       (handler (merge request override))
       (handler request))))
 
