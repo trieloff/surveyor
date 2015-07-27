@@ -16,7 +16,7 @@
 (def fluidsurveys-oauth2
   {:authorization-uri "https://fluidsurveys.com/accounts/developer/authorize/"
    :access-token-uri "https://fluidsurveys.com/accounts/oauth/token/"
-   :redirect-uri "https://localhost:443/fluidsurveys.callback"
+   :redirect-uri (str "https://" ("aha.clientdomain") ":443/fluidsurveys.callback")
    :client-id (config "fluidsurveys.clientid")
    :client-secret (config "fluidsurveys.clientsecret")
    :access-query-param :access_token
