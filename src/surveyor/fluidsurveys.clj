@@ -279,7 +279,7 @@
     (let [response (parse-string body)
           results (get response "results")]
       (if-not (= nil (get response "next"))
-        (lazy-seq (into results (get-results {"responses_uri" (get response "next")})))
+        (lazy-seq (into results (get-results {"responses_uri" (get response "next")} fstoken)))
         results)
     )
 ))
