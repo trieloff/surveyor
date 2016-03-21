@@ -20,7 +20,7 @@ that they are available for the entire product team.
 Using surveyor relies on four tools:
 
 - [aha.io](http://www.aha.io) – is the roadmapping tool that surveyor retrieves features and releases from (at least a Premium account is required to use Aha)
-- [FluidSurveys](https://fluidsurveys.com) – is the survey tool that will be used to create surveys and collect responses (at least the Ultra account is required, the free usage tier does not include access to the API)
+- [Typeform](https://typeform.io) – is the survey tool that will be used to create surveys and collect responses (you need to request an API key to use the system)
 - [Leningen](http://leiningen.org) – running Surveyor requires building it from source code, and this process is using Leiningen as the build tool (Leinigen is free software)
 - (optional) [Heroku](https://www.heroku.com) – Surveyor has been developed to be deployed on Heroku, but can also be run on other PaaS platforms, or run on a self-hosted server (the free usage tier is just fine)
 - (optional) [Foreman](http://theforeman.org) – to simulate a local Heroku environment
@@ -105,19 +105,6 @@ In order to use Aha's API, you need to register an application with Aha.
 6. Click *save*
 7. Note *Client ID/Application ID* and *Client Secret* – these are needed for later steps
 
-### FluidSurveys Application
-
-In order to use FluidSurveys' API, you need to register an application with FluidSurveys.
-
-1. Log in to FluidSurveys
-2. Open the [FluidSurveys Developer Console](https://fluidsurveys.com/accounts/developer/) – you can also browse there from the username dropdown, by selecting *Developer*
-3. Click *create new application*
-4. Enter a name
-5. Enter the redirect_url. In development mode, the URL is generally `https://localhost:443/fluidsurveys.callback`, for production use replace *localhost* with your hostname. Do not omit the port, otherwise the integration will break
-6. Click *Create*
-7. Locate your application in the list and click *Manage*
-8. Note your *client_id* and *client_secret* – these are needed for later steps
-
 
 ## Configuration
 
@@ -131,8 +118,6 @@ deployment on Heroku, where you don't want to store security credentials in plai
 | `aha.clientsecret` | `$AHA_CLIENTSECRET` | The *Client Secret* provided by Aha.io
 | `aha.clientdomain` | `$AHA_CLIENTDOMAIN` | The hostname where your instance of Surveyor is running. In development you can keep `localhost`, for production replace it with the correct hostname. This should be the same hostname you have been specifying as part of the *Redirect URL* for Aha and *redirect_url* for FluidSurveys.
 | `aha.host` | `$AHA_HOST` | The tenant name for the your Aha account. When you are logged in to Aha.io, if the looks like `https://mycompany.aha.io`, you should use `mycompany` as value for this parameter.
-| `fluidsurveys.clientid` | `$FLUIDSURVEYS_CLIENTID` | The *client_id* as provided by FluidSurveys
-| `fluidsurveys.clientsecret` | `FLUIDSURVEYS_CLIENTSECRET` | The *client_secret* as provided by FluidSurveys
 
 All of these settings are mandatory and required to make Surveyor work.
 
@@ -224,7 +209,7 @@ plenty.
 
 ## License
 
-Copyright © 2014 Lars Trieloff
+Copyright © 2016 Lars Trieloff
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
