@@ -19,7 +19,7 @@
   "Creates a JSON body for new surveys based on a list of features and
   outcomes"
   [release features name]
-  {:title name
+  (generate-string {:title name
    :webhook_submit_url (str "https://6ruu1rr486.execute-api.us-east-1.amazonaws.com/dev/" release)
    :fields [(create-question-nps name)
-            (create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")]})
+            (create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")]}))
