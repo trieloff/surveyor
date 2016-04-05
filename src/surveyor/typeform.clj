@@ -26,12 +26,12 @@
 ;;                                     "In your work, how important are the following outcomes to you?"
 ;;                                     "least impotant" "most important" 0 10
 ;;                                     outcomes)
-;;             (create-question-freeform "importance-freeform" "Are there any other outcomes that would be highly important to you?")
+             (create-question-freeform "importance-freeform" "Are there any other outcomes that would be highly important to you?")
 ;;             (create-question-ulwick "ulwick-satisfaction"
 ;;                                     "Considering the current state of things, how satisfied are you with the following outcomes right now?"
 ;;                                     "not at all satisfied" "fully satisfied" 0 10
 ;;                                     outcomes)
-;;             (create-question-freeform "satisfaction-freeform" "Are there any other outcomes you are either highly satisfied or unsatisfied with right now?")
+             (create-question-freeform "satisfaction-freeform" "Are there any other outcomes you are either highly satisfied or unsatisfied with right now?")
 ;;             (create-question-kano "kano-posititive"
 ;;                                   "How would you feel if following outcome would be achieved?"
 ;;                                   outcomes)
