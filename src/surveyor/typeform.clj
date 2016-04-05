@@ -18,6 +18,11 @@
 
 (defn create-question-kano
   [id question outcomes]
+  (map (fn [index item] {:question question
+          :description item
+          :type "multiple_choice"
+          :choices ["I like it" "I expect it" "I don't care" "I can tolerate it" "I dislike it"]
+          :id (str id "-" index)}) outcomes)
   {"showBorders" false,
    "unique" false,
    "grouped" true,
@@ -43,9 +48,10 @@
   "Creates a JSON body for new surveys based on a list of features and
   outcomes"
   [release features name]
+  (let [outcomes (map #(get % "outcome") features)]
   (generate-string {:title name
    :webhook_submit_url (str "https://6ruu1rr486.execute-api.us-east-1.amazonaws.com/dev/" release)
-   :fields [(create-question-nps name)
+   :fields (concat [(create-question-nps name)
 ;;            (create-question-ulwick "ulwick-importance"
 ;;                                     "In your work, how important are the following outcomes to you?"
 ;;                                     "least impotant" "most important" 0 10
@@ -55,11 +61,11 @@
 ;;                                     "Considering the current state of things, how satisfied are you with the following outcomes right now?"
 ;;                                     "not at all satisfied" "fully satisfied" 0 10
 ;;                                     outcomes)
-             (create-question-freeform "satisfaction-freeform" "Are there any other outcomes you are either highly satisfied or unsatisfied with right now?")
-;;             (create-question-kano "kano-posititive"
-;;                                   "How would you feel if following outcome would be achieved?"
-;;                                   outcomes)
-;;             (create-question-kano "kano-negative"
-;;                                   "How would you feel if following outcomes are prevented, this means they cannot be achieved?"
-;;                                   outcomes)
-            (create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")]}))
+             (create-question-freeform "satisfaction-freeform" "Are there any other outcomes you are either highly satisfied or unsatisfied with right now?")]
+             [(create-question-kano "kano-posititive"
+                                   "How would you feel if following outcome would be achieved?"
+                                   outcomes)]
+             [(create-question-kano "kano-negative"
+                                   "How would you feel if following outcome are prevented, this means they cannot be achieved?"
+                                   outcomes)]
+            [(create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")])})))
