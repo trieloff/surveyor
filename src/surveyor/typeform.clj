@@ -2,6 +2,7 @@
   (:require [cheshire.core :refer :all])
   (:require [org.httpkit.client :as http])
   (:require [surveyor.aggregates :refer :all])
+  (:require [surveyor.kano :refer :all])
   (:require [surveyor.config :refer :all]))
 
 (defn create-question-nps [name]
@@ -15,6 +16,29 @@
    :type "long_text"
    :id name})
 
+(defn create-question-kano
+  [id question outcomes]
+  {"showBorders" false,
+   "unique" false,
+   "grouped" true,
+   "idname" "dropdown-grid",
+   "children" (map (fn [label] {"randomizeLimit" "", "alphabetize" false, "type" "dropdown", "required" false, "label" {"en" label}, "static" false, "randomize" false}) outcomes),
+   "id" id,
+   "alphabetize" false,
+   "randomize" false,
+   "randomizeLimit" false,
+   "questionSize" 30,
+   "uniqueError" "Responses must be unique",
+   "title"
+   {"en" question},
+   "choices" likert,
+   "type" "question",
+   "alternateBackground" false,
+   "staticcol" false,
+   "description"
+   {"en" ""}}
+  )
+
 (defn create-survey
   "Creates a JSON body for new surveys based on a list of features and
   outcomes"
@@ -22,7 +46,7 @@
   (generate-string {:title name
    :webhook_submit_url (str "https://6ruu1rr486.execute-api.us-east-1.amazonaws.com/dev/" release)
    :fields [(create-question-nps name)
-            (create-question-ulwick "ulwick-importance"
+;;            (create-question-ulwick "ulwick-importance"
 ;;                                     "In your work, how important are the following outcomes to you?"
 ;;                                     "least impotant" "most important" 0 10
 ;;                                     outcomes)
