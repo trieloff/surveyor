@@ -76,21 +76,21 @@
   (let [outcomes (map #(get % "outcome") features)
         survey {:title name
                 :webhook_submit_url (str "https://6ruu1rr486.execute-api.us-east-1.amazonaws.com/dev/" release)
-                :fields (concat [(create-question-nps name)
+                :fields (concat [(create-question-nps name)]
                                  (create-conjoint-ulwick "ulwick-importance"
                                                          "Which of the two combinations of outcomes would be more important to you?"
                                                          features)
-                                 (create-question-freeform "importance-freeform" "Are there any other outcomes that would be highly important to you?")
+                                 [(create-question-freeform "importance-freeform" "Are there any other outcomes that would be highly important to you?")]
                                  (create-question-ulwick "ulwick-satisfaction"
-                                                         "Considering the current state of things, how satisfied are you with the following outcomes right now?"
+                                                         "Considering the current state of things, how satisfied are you with the following outcome right now?"
                                                          features)
-                                 (create-question-freeform "satisfaction-freeform" "Are there any other outcomes you are either highly satisfied or unsatisfied with right now?")]
-                                [(create-question-kano "kano-posititive"
+                                 [(create-question-freeform "satisfaction-freeform" "Are there any other outcomes you are either highly satisfied or unsatisfied with right now?")]
+                                (create-question-kano "kano-posititive"
                                                        "How would you feel if following outcome would be achieved?"
-                                                       features)]
-                                [(create-question-kano "kano-negative"
+                                                       features)
+                                (create-question-kano "kano-negative"
                                                        "How would you feel if following outcome are prevented, this means they cannot be achieved?"
-                                                       features)]
+                                                       features)
                                 [(create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")])}]
     (do
       (println features)
