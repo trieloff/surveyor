@@ -12,6 +12,8 @@
                  [hiccup "1.0.5"]
                  [ring-server "0.3.1"]
                  [friend-oauth2 "0.1.3"]
+                 [org.clojure/math.combinatorics "0.1.1"]
+                 [org.clojure/math.numeric-tower "0.0.4"]
                  [sudharsh/clj-oauth2 "0.5.3"]]
   :main surveyor.core
   :plugins [[lein-ring "0.8.12"]]
