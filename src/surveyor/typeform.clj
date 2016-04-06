@@ -17,22 +17,22 @@
 (defn create-question-freeform [name description]
   {:question description
    :type "long_text"
-   :id name})
+   :ref name})
 
 (defn create-question-kano
   [id question outcomes]
   (map (fn [item] {:question question
           :description (get item "outcome")
           :type "multiple_choice"
-          :choices ["I like it" "I expect it" "I don't care" "I can tolerate it" "I dislike it"]
-          :id (str id "-" (get item "reference_num"))}) outcomes))
+          :choices (map #(identity {:label %}) ["I like it" "I expect it" "I don't care" "I can tolerate it" "I dislike it"])
+          :ref (str id "-" (get item "reference_num"))}) outcomes))
 
 (defn create-question-ulwick [id question outcomes]
   (map (fn [item] {:question question
                                  :description (get item "outcome")
                                  :type "rating"
                                  :shape "heart"
-                                 :id (str id "-" (get item "reference_num"))}) outcomes))
+                                 :ref (str id "-" (get item "reference_num"))}) outcomes))
 
 (defn conjoint-combinations [qualities]
   (let [samples (int (min 6 (max 1 (math/sqrt (count qualities)))))
@@ -41,9 +41,9 @@
 
 (defn make-description [option-a option-b]
   (str
-    "*Option A*\n"
+    "**Option A**\n"
     (string/join "\n" (map #(str " - " (get % "outcome")) option-a))
-    "\n*Option B*\n"
+    "\n**Option B**\n"
     (string/join "\n" (map #(str " - " (get % "outcome")) option-b))
     ))
 
@@ -60,12 +60,12 @@
     (map (fn [option] {:question question
                        :type "multiple_choice"
                        :choices [{:label "Option A"} {:label "Option B"}]
-                       :id (make-id id (first option) (last option))
+                       :ref (make-id id (first option) (last option))
                        :description (make-description (first option) (last option))}) options)))
 
 ;; {:question question
 ;;             ;;:description (make-description (first %) (last %))
-;;             ;;:id (make-id id (first %) (last %))
+;;             ;;:ref (make-id id (first %) (last %))
 ;;             :type "multiple_choice"
 ;;             :choices [{:label "Option A"} {:label "Option B"}]}
 
