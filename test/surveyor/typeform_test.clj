@@ -1,8 +1,9 @@
 (ns surveyor.typeform-test
   (:require [clojure.test :refer :all]
-            [surveyor.typeform :refer :all]))
+            [surveyor.typeform :refer :all]
+            [surveyor.aha :refer [extract-custom]]))
 
-(def multifeatures '(({"release"
+(def multifeatures '({"release"
    {"resource" "https://blue-yonder.aha.io/api/v1/releases/SBX-R-5",
     "owner"
     {"id" "5993232104682160308",
@@ -106,8 +107,10 @@
    {"id" "6168375296042092407",
     "body" "",
     "created_at" "2015-07-06T12:46:30Z",
-    "attachments" []}})))
+    "attachments" []}}))
+
+(def custom (map extract-custom multifeatures))
 
 (deftest transform-test
   (testing "Creating JSON"
-    (is (="" (create-survey "SBX-R-5" multifeatures "Example Survey")))))
+    (is (="" (create-survey "SBX-R-5" custom "Example Survey")))))
