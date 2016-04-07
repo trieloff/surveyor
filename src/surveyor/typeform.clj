@@ -41,10 +41,10 @@
 
 (defn make-description [option-a option-b]
   (str
-    "**Option A**\n"
-    (string/join "\n" (map #(str " - " (get % "outcome")) option-a))
-    "\n**Option B**\n"
-    (string/join "\n" (map #(str " - " (get % "outcome")) option-b))
+    "**Option A**  \n"
+    (string/join "  \n" (map #(str " - " (get % "outcome")) option-a))
+    "  \n**Option B**  \n"
+    (string/join "  \n" (map #(str " - " (get % "outcome")) option-b))
     ))
 
 (defn make-id [id option-a option-b]
