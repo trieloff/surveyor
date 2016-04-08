@@ -158,6 +158,17 @@
       (generate-string (get-field-mapping parsed-body)))]
       (surveyor.util/map-a-map first (group-by :rel (:_links parsed-body)))))))
 
+(defn get-simple-answers [question results]
+  (map :value (filter #(= question (:type %))
+    (flatten results))))
+
+(defn get-feature-answers [qtype results]
+  (surveyor.util/map-a-map (fn [l] (map :value l))
+    (surveyor.util/grouped-map-by :ref
+      (map #(dissoc % :id :type)
+          (filter #(= qtype (:type %))
+            (flatten results))))))
+
 ;(surveyor.util/grouped-map-by :id (flatten (get-results "SBX-R-5")))
 
 
