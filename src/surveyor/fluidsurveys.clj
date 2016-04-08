@@ -3,6 +3,7 @@
   (:require [org.httpkit.client :as http])
   (:require [surveyor.aggregates :refer :all])
   (:require [surveyor.kano :refer :all])
+  (:require [surveyor.util :refer :all])
   (:require [surveyor.config :refer :all]))
 
 (def fluidsurveys-options {:timeout 2000             ; ms
@@ -145,9 +146,6 @@
 
 ;(group-by-feature (map kano-score (map ulwick-opportunity (strip-results (get-results {"responses_uri"
 ; "https://fluidsurveys.com/api/v3/surveys/717770/responses/"})))))
-
-(defn map-a-map [f m]
-  (into {} (for [[k v] m] [k (f v)])))
 
 (defn remove-labels
   [labeled]
