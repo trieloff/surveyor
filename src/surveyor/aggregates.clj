@@ -22,6 +22,8 @@
 
 ;(1 – NPS) ^ 2    *     #P/#T                     + (0 - NPS) ^ 2 * #N/#T                         + (-1 - NPS) ^ 2 * #D/#T
 
+
+;MoE = SQRT(Var(NPS)) / SQRT(#T)
 (defn aggregate-nps [coll]
   "Calculate Net Promoter Score with variance and min/max bounds."
   (let [responents (count coll)
@@ -32,6 +34,8 @@
         variance   (quot (+
                     (* (expt (- 1 nps) 2) promoters)
                     (* (expt (- nps) 2) neutrals)
-                    (* (expt (- 1 nps) 2) detractors)) responents)]
+                    (* (expt (- -1 nps) 2) detractors)) responents)
+        mo-error   (int (quot (* 100 (sqrt variance)) (sqrt responents)))]
     {:nps nps
-     :variance  variance}))
+     :variance  variance
+     :margin-of-error mo-error}))
