@@ -35,9 +35,28 @@
                     (* (expt (- 1 nps) 2) promoters)
                     (* (expt (- nps) 2) neutrals)
                     (* (expt (- -1 nps) 2) detractors)) responents)
-        stderr   (int (sqrt variance))]
+        stderr     (/ (sqrt variance) (sqrt responents))]
     {:nps       nps
      :variance  variance
      :stderr    stderr
      :nps-max   (min 100 (int (+ nps (* 1.96 stderr))))
      :nps-min   (max -100 (int (- nps (* 1.96 stderr))))}))
+
+(defn aggregate-ulwick [coll]
+  "Calculate percentage of people who think a certain feature is important"
+  (let [responents (count coll)
+        positive   (/ (count (filter #(> % 3) coll)) responents)
+        negative   (/ (count (filter #(< % 4) coll)) responents)
+        variance   (* positive negative)
+        stderr     (/ (sqrt variance) (sqrt responents))]
+    {:positive positive
+     :mean     (mean coll)
+     :median   (median coll)
+     :variance variance
+     :stderr   stderr
+     :val-max  (min 1 (+ positive (* 1.96 stderr)))
+     :val-min  (max 0 (- positive (* 1.96 stderr)))}))
+
+(defn aggregate-all-ulwick [coll key]
+  (surveyor.util/map-a-map key
+    (surveyor.util/map-a-map aggregate-ulwick coll)))

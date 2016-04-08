@@ -178,6 +178,30 @@
               (filter #(= qtype (:type %))
                       (flatten results))))))
 
+
+(def my-results (get-results "SBX-R-5"))
+
+(get-simple-answers "nps-booster" my-results)
+(get-simple-answers "nps" my-results)
+(aggregate-nps (get-simple-answers "nps" my-results))
+(get-simple-answers "satisfaction-freeform" my-results)
+(get-simple-answers "importance-freeform" my-results)
+
+(get-feature-answers "kano-positive" my-results)
+
+(get-feature-answers "kano-negative" my-results)
+
+(get-feature-answers "ulwick-satisfaction" my-results)
+
+(aggregate-ulwick (get (get-feature-answers "ulwick-satisfaction" my-results) "SBX-28"))
+(aggregate-ulwick (get (get-feature-answers "ulwick-satisfaction" my-results) "SBX-29"))
+
+(aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max)
+
+(get-feature-combinations "ulwick-importance" my-results)
+
+(get-results "SBX-R-5")
+
 ;(surveyor.util/grouped-map-by :id (flatten (get-results "SBX-R-5")))
 
 
