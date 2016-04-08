@@ -117,4 +117,8 @@
     (println (slurp "resources/survey.json"))
     (is (=(trim (slurp "resources/survey.json")) (create-survey "SBX-R-5" custom "Example Survey")))))
 
+(deftest parse-test
+  (testing "Reference Key Parsing"
+    (is (= '{:option-a ("AAB-1" "AAB-2"), :option-b ("AAB-3" "AAB-4")} (parse-importance "ulwick-importance-AAB-1-AAB-2-vs-AAB-3-AAB-4")))))
 
+(post-survey (create-survey "SBX-R-5" custom "Example Survey"))

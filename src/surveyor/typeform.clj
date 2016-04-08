@@ -87,7 +87,7 @@
                                                          "Considering the current state of things, how satisfied are you with the following outcome right now?"
                                                          features)
                                  [(create-question-freeform "satisfaction-freeform" "Are there any other outcomes you are either highly satisfied or unsatisfied with right now?")]
-                                (create-question-kano "kano-posititive"
+                                (create-question-kano "kano-positive"
                                                        "How would you feel if following outcome would be achieved?"
                                                        features)
                                 (create-question-kano "kano-negative"
@@ -109,6 +109,43 @@
   (map simplify-answers
     (map #(:answers (parse-string (slurp (:content (s3/get-object creds "tyepform" (:key %)))) true))
        (:objects (s3/list-objects creds "tyepform" {:prefix release})))))
+
+
+(defn parse-importance [refstr]
+  (let [sides (string/split (subs refstr 18) #"-vs-")]
+    {:option-a (map #(string/join "-" %) (partition 2 (string/split (first sides) #"-")))
+     :option-b (map #(string/join "-" %) (partition 2 (string/split (last  sides)  #"-")))}))
+
+(defn get-field-mapping [json]
+  (map #(identity {:id (:id %)
+                   :ref (cond
+                          (string/starts-with? (:ref %) "kano-") (subs (:ref %) 14)
+                          (string/starts-with? (:ref %) "ulwick-satisfaction") (subs (:ref %) 20)
+                          (string/starts-with? (:ref %) "ulwick-importance") (parse-importance (:ref %))
+                          :else nil)
+                   :type (cond
+                           (string/starts-with? (:ref %) "ulwick-importance") "ulwick-importance"
+                           (string/starts-with? (:ref %) "ulwick-satisfaction") "ulwick-satisfaction"
+                           (string/starts-with? (:ref %) "kano-positive") "kano-positive"
+                           (string/starts-with? (:ref %) "kano-negative") "kano-negative"
+                           :else (:ref %))})
+       (:fields json)))
+
+
+
+(def typeform-options {:timeout 2000             ; ms
+              :headers {"X-API-Token" (config "typeform.auth") "Content-Type" "application/json"}})
+
+(defn post-survey
+  ([json]
+   (post-survey json "Feature Survey"))
+  ([json title]
+  (let [{:keys [status headers body error] :as string}
+        @(http/post "https://api.typeform.io/latest/forms" (assoc typeform-options :body json))]
+    (let [parsed-body (parse-string body true)
+          mapping (s3/put-object creds "tyepform" "mapping.json"
+      (generate-string (get-field-mapping parsed-body)))]
+      (surveyor.util/map-a-map first (group-by :rel (:_links parsed-body)))))))
 
 (get-results "SBX-R-5")
 

@@ -4,7 +4,7 @@
   :min-lein-version "2.5.0"
   :license {:name "Eclipse Public License"
             :url "http://opensource.org/licenses/eclipse-1.0.php"}
-  :dependencies [[org.clojure/clojure "1.6.0"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
                  [http-kit "2.1.16"]
                  [clj-time "0.6.0"]
                  [org.clojure/tools.cli "0.3.1"]
