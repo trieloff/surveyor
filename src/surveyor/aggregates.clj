@@ -39,5 +39,5 @@
     {:nps       nps
      :variance  variance
      :stderr    stderr
-     :nps-max   (int (+ nps (* 1.96 stderr)))
-     :nps-min   (int (- nps (* 1.96 stderr)))}))
+     :nps-max   (min 100 (int (+ nps (* 1.96 stderr))))
+     :nps-min   (max -100 (int (- nps (* 1.96 stderr))))}))
