@@ -1,6 +1,7 @@
 (ns surveyor.typeform-test
   (:require [clojure.test :refer :all]
             [surveyor.typeform :refer :all]
+            [clojure.string :refer [trim]]
             [surveyor.aha :refer [extract-custom]]))
 
 (def multifeatures '({"release"
@@ -113,6 +114,7 @@
 
 (deftest transform-test
   (testing "Creating JSON"
-    (is (="" (create-survey "SBX-R-5" custom "Example Survey")))))
+    (println (slurp "resources/survey.json"))
+    (is (=(trim (slurp "resources/survey.json")) (create-survey "SBX-R-5" custom "Example Survey")))))
 
 
