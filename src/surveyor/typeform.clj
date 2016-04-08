@@ -2,11 +2,13 @@
   (:require [cheshire.core :refer :all])
   (:require [org.httpkit.client :as http])
   (:require [surveyor.aggregates :refer :all])
+  (:require [surveyor.config :refer :all])
   (:require [surveyor.kano :refer :all])
   (:require [clojure.string :as string])
   (:require [clojure.math.combinatorics :as combo])
   (:require [clojure.math.numeric-tower :as math])
-  (:require [surveyor.config :refer :all]))
+  (:require [surveyor.config :refer :all])
+  (:require [aws.sdk.s3 :as s3]))
 
 (defn create-question-nps [name]
   {:question (str "How likely is it that you would recommend " name " to a friend or colleague?")
@@ -94,3 +96,17 @@
                                 [(create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")])}]
 
       (generate-string survey)))
+
+
+(def creds {:access-key (config "aws.access.key") , :secret-key (config "aws.secret.key")})
+
+(defn simplify-answer [answer]
+  (identity answer))
+
+(defn get-results [release]
+  (map #(:answers (parse-string (slurp (:content (s3/get-object creds "tyepform" (:key %)))) true))
+       (:objects (s3/list-objects creds "tyepform" {:prefix release}))))
+
+(last (get-results "SBX-R-5"))
+
+
