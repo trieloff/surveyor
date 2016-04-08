@@ -35,7 +35,9 @@
                     (* (expt (- 1 nps) 2) promoters)
                     (* (expt (- nps) 2) neutrals)
                     (* (expt (- -1 nps) 2) detractors)) responents)
-        mo-error   (int (quot (* 100 (sqrt variance)) (sqrt responents)))]
-    {:nps nps
+        stderr   (int (sqrt variance))]
+    {:nps       nps
      :variance  variance
-     :margin-of-error mo-error}))
+     :stderr    stderr
+     :nps-max   (int (+ nps (* 1.96 stderr)))
+     :nps-min   (int (- nps (* 1.96 stderr)))}))
