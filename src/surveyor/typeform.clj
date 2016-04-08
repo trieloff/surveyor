@@ -92,7 +92,5 @@
                                                        "How would you feel if following outcome are prevented, this means they cannot be achieved?"
                                                        features)
                                 [(create-question-freeform "nps-booster" "If there was one single thing we could do to make you recommend the product, what would it be?")])}]
-    (do
-      (println features)
-      (println (generate-string survey))
-      (generate-string survey))))
+
+      (generate-string survey)))
