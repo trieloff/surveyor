@@ -100,16 +100,27 @@
 
 (def creds {:access-key (config "aws.access.key") , :secret-key (config "aws.secret.key")})
 
-(defn simplify-answers [answers]
-  (map #(identity {:id (int (:field_id %))
-                   :value (:amount (:value %) (:label (:value %) (:value %)))})
+(defn get-mapping [id mapping]
+  (first (filter #(= id (:id %)) mapping)))
+
+
+(def my-mapping (parse-string (slurp (:content (s3/get-object creds "tyepform" (str "SBX-R-5" "/mapping.json")))) true))
+
+(get-mapping 4397302 my-mapping)
+
+(defn simplify-answers [answers mapping]
+  (map #(merge {:id (int (:field_id %))
+                   :value (:amount (:value %) (:label (:value %) (:value %)))}
+               (get-mapping (int (:field_id %)) mapping))
        answers))
 
 (defn get-results [release]
-  (map simplify-answers
-    (map #(:answers (parse-string (slurp (:content (s3/get-object creds "tyepform" (:key %)))) true))
-       (:objects (s3/list-objects creds "tyepform" {:prefix release})))))
-
+  (let [mapping (parse-string (slurp (:content (s3/get-object creds "tyepform" (str release "/mapping.json")))) true)]
+    (map #(simplify-answers % mapping)
+       (map #(:answers (parse-string (slurp (:content (s3/get-object creds "tyepform" (:key %)))) true))
+            (filter
+              #(not (= (str release "/" "mapping.json") (:key %)))
+              (:objects (s3/list-objects creds "tyepform" {:prefix release})))))))
 
 (defn parse-importance [refstr]
   (let [sides (string/split (subs refstr 18) #"-vs-")]
@@ -147,6 +158,6 @@
       (generate-string (get-field-mapping parsed-body)))]
       (surveyor.util/map-a-map first (group-by :rel (:_links parsed-body)))))))
 
-(get-results "SBX-R-5")
+;(surveyor.util/grouped-map-by :id (flatten (get-results "SBX-R-5")))
 
 
