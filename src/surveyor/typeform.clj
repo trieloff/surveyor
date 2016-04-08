@@ -169,6 +169,15 @@
           (filter #(= qtype (:type %))
             (flatten results))))))
 
+(defn get-feature-combinations [qtype results]
+  (mapcat identity
+    (map #(combo/cartesian-product (:win %) (:lose %))
+         (map #(case (:value %)
+                 "Option A" {:win (-> % :ref :option-a) :lose (-> % :ref :option-b)}
+                 "Option B" {:win (-> % :ref :option-b) :lose (-> % :ref :option-a)})
+              (filter #(= qtype (:type %))
+                      (flatten results))))))
+
 ;(surveyor.util/grouped-map-by :id (flatten (get-results "SBX-R-5")))
 
 
