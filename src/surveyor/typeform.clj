@@ -100,13 +100,16 @@
 
 (def creds {:access-key (config "aws.access.key") , :secret-key (config "aws.secret.key")})
 
-(defn simplify-answer [answer]
-  (identity answer))
+(defn simplify-answers [answers]
+  (map #(identity {:id (int (:field_id %))
+                   :value (:amount (:value %) (:label (:value %) (:value %)))})
+       answers))
 
 (defn get-results [release]
-  (map #(:answers (parse-string (slurp (:content (s3/get-object creds "tyepform" (:key %)))) true))
-       (:objects (s3/list-objects creds "tyepform" {:prefix release}))))
+  (map simplify-answers
+    (map #(:answers (parse-string (slurp (:content (s3/get-object creds "tyepform" (:key %)))) true))
+       (:objects (s3/list-objects creds "tyepform" {:prefix release})))))
 
-(last (get-results "SBX-R-5"))
+(get-results "SBX-R-5")
 
 
