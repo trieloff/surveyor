@@ -138,12 +138,12 @@
 
 (defn post-survey
   ([json]
-   (post-survey json "Feature Survey"))
-  ([json title]
+   (post-survey json "NULL"))
+  ([json id]
   (let [{:keys [status headers body error] :as string}
         @(http/post "https://api.typeform.io/latest/forms" (assoc typeform-options :body json))]
     (let [parsed-body (parse-string body true)
-          mapping (s3/put-object creds "tyepform" "mapping.json"
+          mapping (s3/put-object creds "tyepform" (str id "/mapping.json")
       (generate-string (get-field-mapping parsed-body)))]
       (surveyor.util/map-a-map first (group-by :rel (:_links parsed-body)))))))
 
