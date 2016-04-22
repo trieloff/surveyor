@@ -210,17 +210,6 @@
 (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max)
 
 (group-glicko-scores "ulwick-importance" my-results)
-
-(get-feature-combinations "ulwick-importance" my-results)
-
-(as-glicko-matches (get-feature-combinations "ulwick-importance" my-results))
-
-(rank-glicko-teams (as-glicko-matches (get-feature-combinations "ulwick-importance" my-results)))
-
-(rank-glicko-teams '({:home "A" :away "B" :home_score 1 :away_score 0}))
-
-(group-by first (rank-glicko-teams '({:home "A" :away "B" :home_score 1 :away_score 0})))
-
 (get-results "SBX-R-5")
 
 ;(surveyor.util/grouped-map-by :id (flatten (get-results "SBX-R-5")))
