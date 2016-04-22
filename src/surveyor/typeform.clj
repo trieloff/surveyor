@@ -186,6 +186,10 @@
           :home_score 1
           :away_score 0}) matches))
 
+(defn group-glicko-scores [question results]
+  "Get the normalized Ulwick/Glicko importance for a set of questions"
+  (group-by first (rank-glicko-teams (as-glicko-matches (get-feature-combinations question results)))))
+
 (def my-results (get-results "SBX-R-5"))
 
 (get-simple-answers "nps-booster" my-results)
@@ -205,6 +209,8 @@
 
 (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max)
 
+(group-glicko-scores "ulwick-importance" my-results)
+
 (get-feature-combinations "ulwick-importance" my-results)
 
 (as-glicko-matches (get-feature-combinations "ulwick-importance" my-results))
@@ -212,6 +218,8 @@
 (rank-glicko-teams (as-glicko-matches (get-feature-combinations "ulwick-importance" my-results)))
 
 (rank-glicko-teams '({:home "A" :away "B" :home_score 1 :away_score 0}))
+
+(group-by first (rank-glicko-teams '({:home "A" :away "B" :home_score 1 :away_score 0})))
 
 (get-results "SBX-R-5")
 
