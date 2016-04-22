@@ -186,9 +186,28 @@
           :home_score 1
           :away_score 0}) matches))
 
+(defn enrich-glicko-score [score]
+  {:median (nth score 1)
+   :stderr (last score)
+   :val-max (+ (nth score 1) (* 2 (last score)))
+   :val-min (- (nth score 1) (* 2 (last score)))})
+
+(defn normalize-glicko-score [score max-val]
+  {:median (/ (:median score) max-val)})
+
 (defn group-glicko-scores [question results]
   "Get the normalized Ulwick/Glicko importance for a set of questions"
-  (group-by first (rank-glicko-teams (as-glicko-matches (get-feature-combinations question results)))))
+  (let [scores (surveyor.util/map-a-map
+                 enrich-glicko-score
+                 (surveyor.util/map-a-map
+                   first
+                   (group-by
+                     first
+                     (rank-glicko-teams
+                       (as-glicko-matches
+                         (get-feature-combinations question results))))))
+        max-val (apply max (vals (surveyor.util/map-a-map :val-max scores)))]
+    (surveyor.util/map-a-map #(normalize-glicko-score % max-val) scores)))
 
 (def my-results (get-results "SBX-R-5"))
 
