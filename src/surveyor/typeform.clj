@@ -193,7 +193,10 @@
    :val-min (- (nth score 1) (* 2 (last score)))})
 
 (defn normalize-glicko-score [score max-val]
-  {:median (/ (:median score) max-val)})
+  {:median (/ (:median score) max-val)
+   :stderr (/ (:stderr score) max-val)
+   :val-max (/ (:val-max score) max-val)
+   :val-min (/ (:val-min score) max-val)})
 
 (defn group-glicko-scores [question results]
   "Get the normalized Ulwick/Glicko importance for a set of questions"
