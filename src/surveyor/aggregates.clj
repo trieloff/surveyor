@@ -1,5 +1,6 @@
 (ns surveyor.aggregates
   (:require [clojure.string :refer :all])
+  (:require [surveyor.util :refer [map-a-map]])
   (:require [clojure.math.numeric-tower :refer :all]))
 
 (defn mean [coll]
@@ -58,5 +59,5 @@
      :val-min  (max 0 (- positive (* 1.96 stderr)))}))
 
 (defn aggregate-all-ulwick [coll key]
-  (surveyor.util/map-a-map key
-    (surveyor.util/map-a-map aggregate-ulwick coll)))
+  (map-a-map key
+    (map-a-map aggregate-ulwick coll)))
