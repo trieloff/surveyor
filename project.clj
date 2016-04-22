@@ -15,6 +15,7 @@
                  [clj-aws-s3 "0.3.10" :exclusions [joda-time]]
                  [org.clojure/math.combinatorics "0.1.1"]
                  [org.clojure/math.numeric-tower "0.0.4"]
+                 [ranking-algorithms "0.1.0-SNAPSHOT"]
                  [sudharsh/clj-oauth2 "0.5.3"]]
   :main surveyor.core
   :plugins [[lein-ring "0.8.12"]]

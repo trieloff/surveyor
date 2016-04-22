@@ -8,6 +8,7 @@
   (:require [clojure.math.combinatorics :as combo])
   (:require [clojure.math.numeric-tower :as math])
   (:require [surveyor.config :refer :all])
+  (:require [ranking-algorithms.core :refer [rank-glicko-teams]])
   (:require [aws.sdk.s3 :as s3]))
 
 (defn create-question-nps [name]
@@ -179,6 +180,12 @@
                       (flatten results))))))
 
 
+(defn as-glicko-matches [matches]
+  (map (fn [match] {:home (first match)
+          :away (last match)
+          :home_score 1
+          :away_score 0}) matches))
+
 (def my-results (get-results "SBX-R-5"))
 
 (get-simple-answers "nps-booster" my-results)
@@ -199,6 +206,12 @@
 (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max)
 
 (get-feature-combinations "ulwick-importance" my-results)
+
+(as-glicko-matches (get-feature-combinations "ulwick-importance" my-results))
+
+(rank-glicko-teams (as-glicko-matches (get-feature-combinations "ulwick-importance" my-results)))
+
+(rank-glicko-teams '({:home "A" :away "B" :home_score 1 :away_score 0}))
 
 (get-results "SBX-R-5")
 
