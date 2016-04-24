@@ -254,17 +254,3 @@
 (aggregate-nps (get-simple-answers "nps" my-results))
 (get-simple-answers "satisfaction-freeform" my-results)
 (get-simple-answers "importance-freeform" my-results)
-
-(kano-score "I like it", "I don't care")
-
-(kano-score '("I like it" "I like it" "I like it" "I like it" "I like it") '("I don't care" "I can tolerate it" "I can tolerate it" "I can tolerate it" "I can tolerate it"))
-
-(get-feature-answers "kano-positive" my-results)
-
-
-
-
-(ulwick-score (group-glicko-scores "ulwick-importance" my-results) (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results)))
-
-
-
