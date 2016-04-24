@@ -198,7 +198,7 @@
    :val-max (/ (:val-max score) max-val)
    :val-min (/ (:val-min score) max-val)})
 
-(defn group-glicko-scores [question results]
+(defn group-glicko-scores ([question results]
   "Get the normalized Ulwick/Glicko importance for a set of questions"
   (let [scores (surveyor.util/map-a-map
                  enrich-glicko-score
@@ -211,6 +211,9 @@
                          (get-feature-combinations question results))))))
         max-val (apply max (vals (surveyor.util/map-a-map :val-max scores)))]
     (surveyor.util/map-a-map #(normalize-glicko-score % max-val) scores)))
+  ([question results lookup]
+  "Get the normalized Ulwick/Glicko importance for a set of questions, for specicic lookup key"
+  (surveyor.util/map-a-map lookup (group-glicko-scores question results))))
 
 (def my-results (get-results "SBX-R-5"))
 
@@ -231,7 +234,7 @@
 
 (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max)
 
-(group-glicko-scores "ulwick-importance" my-results)
+(group-glicko-scores "ulwick-importance" my-results :val-max)
 (get-results "SBX-R-5")
 
 ;(surveyor.util/grouped-map-by :id (flatten (get-results "SBX-R-5")))
