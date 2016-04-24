@@ -238,7 +238,16 @@
     (and (map? positive) (map? negative)) (apply merge (map #(hash-map % (kano-score (get positive %) (get negative %))) (intersection (set (keys positive)) (set (keys negative)))))
     (and (seq? positive) (seq? negative)) (kano-score (mode positive) (mode negative))))
 
+(defn combined-results [results key]
+  (let [kano (kano-score (get-feature-answers "kano-positive" my-results) (get-feature-answers "kano-negative" my-results))
+        ulwick (ulwick-score (group-glicko-scores "ulwick-importance" my-results key) (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) key))]
+    (apply merge (map #(hash-map % {:kano (get kano %)
+                                    :ulwick (Math/round (* 10 (get ulwick %)))})
+         (intersection (set (keys kano)) (set (keys ulwick)))))))
+
 (def my-results (get-results "SBX-R-5"))
+
+(combined-results my-results :val-min)
 
 (get-simple-answers "nps-booster" my-results)
 (get-simple-answers "nps" my-results)
@@ -253,9 +262,9 @@
 (get-feature-answers "kano-positive" my-results)
 
 
-(kano-score (get-feature-answers "kano-positive" my-results) (get-feature-answers "kano-negative" my-results))
+
 
 (ulwick-score (group-glicko-scores "ulwick-importance" my-results) (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results)))
 
 
-(ulwick-score (group-glicko-scores "ulwick-importance" my-results :val-max) (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max))
+
