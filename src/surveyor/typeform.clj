@@ -5,6 +5,7 @@
   (:require [surveyor.config :refer :all])
   (:require [surveyor.kano :refer :all])
   (:require [clojure.string :as string])
+  (:require [clojure.set :refer [intersection]])
   (:require [clojure.math.combinatorics :as combo])
   (:require [clojure.math.numeric-tower :as math])
   (:require [surveyor.config :refer :all])
@@ -215,6 +216,23 @@
   "Get the normalized Ulwick/Glicko importance for a set of questions, for specicic lookup key"
   (surveyor.util/map-a-map lookup (group-glicko-scores question results))))
 
+(defmulti ulwick-score
+  (fn [importance satisfaction]
+    (cond
+      (and (number? importance) (number? satisfaction)) :single-value
+      (and (map? importance) (map? satisfaction) (map? (first (vals importance))) (map? (first (vals satisfaction)))) :feature-map
+      (and (map? importance) (map? satisfaction)) :value-map
+      :else :default)))
+
+(defn ulwick-score [importance satisfaction]
+  (cond
+    (and (number? importance) (number? satisfaction))
+      (+ importance (max (- importance satisfaction) 0)) ;;single value calculation
+    (and (map? importance) (map? satisfaction))
+      (apply merge (map #(hash-map % (ulwick-score (get importance %) (get satisfaction %))) (intersection (set (keys satisfaction)) (set (keys importance)))))
+    :else :default))
+
+
 (def my-results (get-results "SBX-R-5"))
 
 (get-simple-answers "nps-booster" my-results)
@@ -232,11 +250,15 @@
 (aggregate-ulwick (get (get-feature-answers "ulwick-satisfaction" my-results) "SBX-28"))
 (aggregate-ulwick (get (get-feature-answers "ulwick-satisfaction" my-results) "SBX-29"))
 
+
+
 (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max)
 
+(aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results))
+
 (group-glicko-scores "ulwick-importance" my-results :val-max)
-(get-results "SBX-R-5")
-
-;(surveyor.util/grouped-map-by :id (flatten (get-results "SBX-R-5")))
 
 
+(ulwick-score {"KOO-19" {:min 8 :max 10}} {"KOO-19" {:min 4 :max 8 :foo :bar}})
+
+(ulwick-score {:min 8 :max 10} {:min 2 :max 8 :foo :bar})
