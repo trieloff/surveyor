@@ -1,5 +1,5 @@
 (ns surveyor.aggregates
-  (:require [clojure.string :refer :all])
+  (:require [clojure.string :refer [join]])
   (:require [surveyor.util :refer [map-a-map]])
   (:require [clojure.math.numeric-tower :refer :all]))
 
