@@ -225,6 +225,19 @@
     :else :default))
 
 
+(def long-kano-matrix {
+ ["I like it" "I like it"] "questionable" ["I like it" "I expect it"] "attractive"  ["I like it" "I don't care"] "attractive"  ["I like it" "I can tolerate it"] "attractive"  ["I like it" "I dislike it"] "one-dimensional"
+ ["I expect it" "I like it"] "reverse"      ["I expect it" "I expect it"] "indifferent" ["I expect it" "I don't care"] "indifferent" ["I expect it" "I can tolerate it"] "indifferent" ["I expect it" "I dislike it"] "must-be"
+ ["I don't care" "I like it"] "reverse"      ["I don't care" "I expect it"] "indifferent" ["I don't care" "I don't care"] "indifferent" ["I don't care" "I can tolerate it"] "indifferent" ["I don't care" "I dislike it"] "must-be"
+ ["I can tolerate it" "I like it"] "reverse"      ["I can tolerate it" "I expect it"] "indifferent" ["I can tolerate it" "I don't care"] "indifferent" ["I can tolerate it" "I can tolerate it"] "indifferent" ["I can tolerate it" "I dislike it"] "must-be"
+ ["I dislike it" "I like it"] "reverse"      ["I dislike it" "I expect it"] "reverse"     ["I dislike it" "I don't care"] "reverse"     ["I dislike it" "I can tolerate it"] "reverse"     ["I dislike it" "I dislike it"] "questionable"})
+
+(defn kano-score [positive negative]
+  (cond
+    (and (string? positive) (string? negative)) (get long-kano-matrix [positive negative])
+    (and (map? positive) (map? negative)) (apply merge (map #(hash-map % (kano-score (get positive %) (get negative %))) (intersection (set (keys positive)) (set (keys negative)))))
+    (and (seq? positive) (seq? negative)) (kano-score (mode positive) (mode negative))))
+
 (def my-results (get-results "SBX-R-5"))
 
 (get-simple-answers "nps-booster" my-results)
@@ -233,23 +246,14 @@
 (get-simple-answers "satisfaction-freeform" my-results)
 (get-simple-answers "importance-freeform" my-results)
 
+(kano-score "I like it", "I don't care")
+
+(kano-score '("I like it" "I like it" "I like it" "I like it" "I like it") '("I don't care" "I can tolerate it" "I can tolerate it" "I can tolerate it" "I can tolerate it"))
+
 (get-feature-answers "kano-positive" my-results)
 
-(get-feature-answers "kano-negative" my-results)
 
-(get-feature-answers "ulwick-satisfaction" my-results)
-
-(aggregate-ulwick (get (get-feature-answers "ulwick-satisfaction" my-results) "SBX-28"))
-(aggregate-ulwick (get (get-feature-answers "ulwick-satisfaction" my-results) "SBX-29"))
-
-
-
-(aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max)
-
-(aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results))
-
-(group-glicko-scores "ulwick-importance" my-results :val-max)
-
+(kano-score (get-feature-answers "kano-positive" my-results) (get-feature-answers "kano-negative" my-results))
 
 (ulwick-score (group-glicko-scores "ulwick-importance" my-results) (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results)))
 
