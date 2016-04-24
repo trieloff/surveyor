@@ -251,6 +251,7 @@
 (group-glicko-scores "ulwick-importance" my-results :val-max)
 
 
-(ulwick-score {"KOO-19" {:min 8 :max 10}} {"KOO-19" {:min 4 :max 8 :foo :bar}})
+(ulwick-score (group-glicko-scores "ulwick-importance" my-results) (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results)))
 
-(ulwick-score {:min 8 :max 10} {:min 2 :max 8 :foo :bar})
+
+(ulwick-score (group-glicko-scores "ulwick-importance" my-results :val-max) (aggregate-all-ulwick (get-feature-answers "ulwick-satisfaction" my-results) :val-max))
