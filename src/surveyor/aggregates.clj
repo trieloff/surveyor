@@ -58,6 +58,8 @@
      :val-max  (min 1 (+ positive (* 1.96 stderr)))
      :val-min  (max 0 (- positive (* 1.96 stderr)))}))
 
-(defn aggregate-all-ulwick [coll key]
+(defn aggregate-all-ulwick ([coll key]
   (map-a-map key
     (map-a-map aggregate-ulwick coll)))
+  ([coll]
+   (map-a-map aggregate-ulwick coll)))
