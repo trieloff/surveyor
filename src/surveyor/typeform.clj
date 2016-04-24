@@ -216,14 +216,6 @@
   "Get the normalized Ulwick/Glicko importance for a set of questions, for specicic lookup key"
   (surveyor.util/map-a-map lookup (group-glicko-scores question results))))
 
-(defmulti ulwick-score
-  (fn [importance satisfaction]
-    (cond
-      (and (number? importance) (number? satisfaction)) :single-value
-      (and (map? importance) (map? satisfaction) (map? (first (vals importance))) (map? (first (vals satisfaction)))) :feature-map
-      (and (map? importance) (map? satisfaction)) :value-map
-      :else :default)))
-
 (defn ulwick-score [importance satisfaction]
   (cond
     (and (number? importance) (number? satisfaction))
